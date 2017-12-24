@@ -1,7 +1,7 @@
 package com.zevinar.crypto.workers;
 
-public class StartWorker {
+public class StartHook {
 	public static void main(String[] args){
-		
+		 
 	}
 }

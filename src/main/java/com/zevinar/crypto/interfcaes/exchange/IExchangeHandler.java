@@ -1,4 +1,4 @@
-package com.zevinar.crypto.interfcaes;
+package com.zevinar.crypto.interfcaes.exchange;
 
 import java.util.List;
 

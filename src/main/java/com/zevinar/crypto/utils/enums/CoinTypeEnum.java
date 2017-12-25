@@ -1,7 +1,7 @@
 package com.zevinar.crypto.utils.enums;
 
 public enum CoinTypeEnum {
-	BTC("Bit Coin"), LTC("Lite Coin"), ETH("Etherum");
+	BTC("Bit Coin"), LTC("Lite Coin"), ETH("Etherum"), DSH("Dash");
 	
 	private String coinName;
 	

@@ -1,5 +1,6 @@
 package com.zevinar.crypto.bl;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -13,20 +14,24 @@ import com.zevinar.crypto.interfcaes.exchange.IExchangeHandler;
 import com.zevinar.crypto.utils.datastruct.Wrapper;
 import com.zevinar.crypto.utils.enums.CoinTypeEnum;
 
-public class CryptoBusinessLogic {
+public final class CryptoBusinessLogic {
+	
+	private CryptoBusinessLogic(){
+		throw new UnsupportedOperationException("Utility class do not instantiate");
+	}
 	/**
 	 * Best Deal 
-	 * @param first
-	 * @param second
+	 * @param firstExchange
+	 * @param secondExchange
 	 * @return
 	 */
-	public static IDeal calculateBestArbitrage(IExchangeHandler first, IExchangeHandler second) {
-		List<ICoinQuote> quotesFirst = first.getQuotes();
-		List<ICoinQuote> quotesSecond = second.getQuotes();
+	public static IDeal calculateBestArbitrage(IExchangeHandler firstExchange, IExchangeHandler secondExchange) {
+		List<ICoinQuote> quotesFirst = firstExchange.getQuotes();
+		List<ICoinQuote> quotesSecond = secondExchange.getQuotes();
 		Map<CoinTypeEnum, ICoinQuote> firstQuoteMap = quotesFirst.stream()
-				.collect(Collectors.toMap(quote -> quote.getCoinType(), Function.identity()));
+				.collect(Collectors.toMap(ICoinQuote::getCoinType, Function.identity()));
 		Map<CoinTypeEnum, ICoinQuote> secondQuoteMap = quotesSecond.stream()
-				.collect(Collectors.toMap(quote -> quote.getCoinType(), Function.identity()));
+				.collect(Collectors.toMap(ICoinQuote::getCoinType, Function.identity()));
 		Comparator<ICoinQuote> coinTypeComparator = (q1, q2) -> q1.getCoinType().compareTo(q2.getCoinType());
 		List<ICoinQuote> filteredFirst = quotesFirst.stream()
 				.filter(quote -> secondQuoteMap.containsKey(quote.getCoinType())).sorted(coinTypeComparator)
@@ -38,13 +43,13 @@ public class CryptoBusinessLogic {
 		for (int i = 0; i < filteredFirst.size(); i++) {
 			for (int j = i + 1; j < filteredFirst.size(); j++) {
 				updateBestDeal(filteredFirst.get(i), filteredSecond.get(i), filteredSecond.get(j), filteredFirst.get(j),
-						first, second, bestWrapper);
+						firstExchange, secondExchange, bestWrapper);
 				updateBestDeal(filteredFirst.get(j), filteredSecond.get(j), filteredSecond.get(i), filteredFirst.get(i),
-						first, second, bestWrapper);
+						firstExchange, secondExchange, bestWrapper);
 				updateBestDeal(filteredSecond.get(j), filteredFirst.get(j), filteredFirst.get(i), filteredSecond.get(i),
-						first, second, bestWrapper);
+						firstExchange, secondExchange, bestWrapper);
 				updateBestDeal(filteredSecond.get(i), filteredFirst.get(i), filteredFirst.get(j), filteredSecond.get(j),
-						first, second, bestWrapper);
+						firstExchange, secondExchange, bestWrapper);
 
 			}
 
@@ -54,18 +59,27 @@ public class CryptoBusinessLogic {
 	}
 
 	private static void updateBestDeal(ICoinQuote buyFirstExchange, ICoinQuote sellSecondExchange,
-			ICoinQuote buySecondExchange, ICoinQuote sellFirstExchange, IExchangeHandler first, IExchangeHandler second, Wrapper<IDeal> bestWrapper) {
-		IDeal current = calculateDeal(buyFirstExchange, sellSecondExchange, buySecondExchange, sellFirstExchange, first, second);
+			ICoinQuote buySecondExchange, ICoinQuote sellFirstExchange, IExchangeHandler firstExchange, IExchangeHandler secondExchange, Wrapper<IDeal> bestWrapper) {
+		IDeal current = calculateDeal(buyFirstExchange, sellSecondExchange, buySecondExchange, sellFirstExchange, firstExchange, secondExchange);
 		if (current.compareTo(bestWrapper.getInnerElement()) > 0) {
 			bestWrapper.setInnerElement(current);
 		}
 	}
-
-	private static IDeal calculateDeal(ICoinQuote buyFirstExchange, ICoinQuote sellSecondExchange,
-			ICoinQuote buySecondExchange, ICoinQuote sellFirstExchange, IExchangeHandler first, IExchangeHandler second) {
-		Double priceSpent = buyFirstExchange.getUSDollarQuote() /(1 - first.getTransactionFee()) / ( 1 - first.getMoveCoinFee());
-		Double numberOfSecondCoinUnitsBought = sellSecondExchange.getUSDollarQuote() * ( 1 - second.getTransactionFee() ) / buySecondExchange.getUSDollarQuote();
-		Double priceEarned = numberOfSecondCoinUnitsBought * (1 - second.getMoveCoinFee()) * (1 - first.getTransactionFee()) *  sellFirstExchange.getUSDollarQuote();
-		return new DealImpl(buyFirstExchange, sellSecondExchange, buySecondExchange, sellFirstExchange, first, second, priceEarned - priceSpent);
+	protected static IDeal calculateDeal(ICoinQuote buyFirstExchange, ICoinQuote sellSecondExchange,
+			ICoinQuote buySecondExchange, ICoinQuote sellFirstExchange, IExchangeHandler firstExchange, IExchangeHandler secondExchange) {
+		final BigDecimal percentageAfterFirstExchangeTransactionFee = BigDecimal.valueOf(1 - firstExchange.getTransactionFee());
+		final BigDecimal percentageAfterSecondExchangeTransactionFee = BigDecimal.valueOf(1 - secondExchange.getTransactionFee());
+		
+		BigDecimal initialCashSpent = new BigDecimal(buyFirstExchange.getUSDollarBuy()) ;
+		BigDecimal numCoinBoughtFirst =  initialCashSpent.multiply(percentageAfterFirstExchangeTransactionFee).divide(initialCashSpent, 0);
+		BigDecimal numCoinSentSecond = numCoinBoughtFirst.multiply(BigDecimal.valueOf(1 - firstExchange.getMoveCoinFee()));
+		BigDecimal priceCoinSoldSecond = numCoinSentSecond.multiply(BigDecimal.valueOf(sellSecondExchange.getUSDollarSell())).multiply(percentageAfterSecondExchangeTransactionFee);
+		BigDecimal numOfCoinsConvertedSecond = priceCoinSoldSecond.multiply(percentageAfterSecondExchangeTransactionFee).divide(BigDecimal.valueOf(buySecondExchange.getUSDollarBuy()), 0);
+		BigDecimal numOfCoinsSentFirst = numOfCoinsConvertedSecond.multiply(BigDecimal.valueOf(1 - secondExchange.getMoveCoinFee()));
+		BigDecimal priceCoinSoldFirst = numOfCoinsSentFirst.multiply(BigDecimal.valueOf(sellFirstExchange.getUSDollarSell())).multiply(percentageAfterFirstExchangeTransactionFee);
+		
+		double profit = priceCoinSoldFirst.subtract(initialCashSpent).doubleValue();
+		final IDeal deal = new DealImpl(buyFirstExchange, sellSecondExchange, buySecondExchange, sellFirstExchange, firstExchange, secondExchange, profit);
+		return deal;
 	}
 }

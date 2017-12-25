@@ -1,7 +1,7 @@
 package com.zevinar.crypto.utils.enums;
 
 public enum ExchangeDetailsEnum {
-	WEX("Bit Coin"), BNC("Binance");
+	WEX("Wex"), BNC("Binance");
 
 	private String exchangeName;
 

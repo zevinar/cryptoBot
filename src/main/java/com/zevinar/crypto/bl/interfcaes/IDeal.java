@@ -1,7 +1,7 @@
-package com.zevinar.crypto.interfcaes.bl;
+package com.zevinar.crypto.bl.interfcaes;
 
-import com.zevinar.crypto.interfcaes.exchange.ICoinQuote;
-import com.zevinar.crypto.interfcaes.exchange.IExchangeHandler;
+import com.zevinar.crypto.exchange.interfcaes.ICoinQuote;
+import com.zevinar.crypto.exchange.interfcaes.IExchangeHandler;
 
 public interface IDeal extends Comparable<IDeal>{
 	Double getExpectedProfit();

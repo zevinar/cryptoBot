@@ -7,16 +7,16 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.zevinar.crypto.impl.bl.DealImpl;
-import com.zevinar.crypto.interfcaes.bl.IDeal;
-import com.zevinar.crypto.interfcaes.exchange.ICoinQuote;
-import com.zevinar.crypto.interfcaes.exchange.IExchangeHandler;
+import com.zevinar.crypto.bl.impl.DealImpl;
+import com.zevinar.crypto.bl.interfcaes.IDeal;
+import com.zevinar.crypto.exchange.interfcaes.ICoinQuote;
+import com.zevinar.crypto.exchange.interfcaes.IExchangeHandler;
 import com.zevinar.crypto.utils.datastruct.Wrapper;
 import com.zevinar.crypto.utils.enums.CoinTypeEnum;
+ 
+public final class ArbitrageBusinessLogic {
 
-public final class CryptoBusinessLogic {
-	
-	private CryptoBusinessLogic(){
+	private ArbitrageBusinessLogic(){
 		throw new UnsupportedOperationException("Utility class do not instantiate");
 	}
 	/**
@@ -26,8 +26,8 @@ public final class CryptoBusinessLogic {
 	 * @return
 	 */
 	public static IDeal calculateBestArbitrage(IExchangeHandler firstExchange, IExchangeHandler secondExchange) {
-		List<ICoinQuote> quotesFirst = firstExchange.getQuotes();
-		List<ICoinQuote> quotesSecond = secondExchange.getQuotes();
+		List<ICoinQuote> quotesFirst = firstExchange.getALlCoinsQuotes();
+		List<ICoinQuote> quotesSecond = secondExchange.getALlCoinsQuotes();
 		Map<CoinTypeEnum, ICoinQuote> firstQuoteMap = quotesFirst.stream()
 				.collect(Collectors.toMap(ICoinQuote::getCoinType, Function.identity()));
 		Map<CoinTypeEnum, ICoinQuote> secondQuoteMap = quotesSecond.stream()

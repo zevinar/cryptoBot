@@ -1,4 +1,4 @@
-package com.zevinar.crypto.interfcaes.exchange;
+package com.zevinar.crypto.exchange.interfcaes;
 
 import com.zevinar.crypto.utils.enums.CoinTypeEnum;
 

@@ -1,8 +1,8 @@
-package com.zevinar.crypto.impl.bl;
+package com.zevinar.crypto.bl.impl;
 
-import com.zevinar.crypto.interfcaes.bl.IDeal;
-import com.zevinar.crypto.interfcaes.exchange.ICoinQuote;
-import com.zevinar.crypto.interfcaes.exchange.IExchangeHandler;
+import com.zevinar.crypto.bl.interfcaes.IDeal;
+import com.zevinar.crypto.exchange.interfcaes.ICoinQuote;
+import com.zevinar.crypto.exchange.interfcaes.IExchangeHandler;
 
 public class DealImpl implements IDeal {
 

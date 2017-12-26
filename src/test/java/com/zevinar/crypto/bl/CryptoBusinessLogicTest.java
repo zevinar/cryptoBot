@@ -9,9 +9,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.zevinar.crypto.interfcaes.bl.IDeal;
-import com.zevinar.crypto.interfcaes.exchange.ICoinQuote;
-import com.zevinar.crypto.interfcaes.exchange.IExchangeHandler;
+import com.zevinar.crypto.bl.interfcaes.IDeal;
+import com.zevinar.crypto.exchange.interfcaes.ICoinQuote;
+import com.zevinar.crypto.exchange.interfcaes.IExchangeHandler;
 import com.zevinar.crypto.utils.enums.CoinTypeEnum;
 import com.zevinar.crypto.utils.enums.ExchangeDetailsEnum;
 
@@ -24,7 +24,7 @@ public class CryptoBusinessLogicTest {
 		ICoinQuote buySecondExchange = buildMockQuote(10000, CoinTypeEnum.BTC);
 		ICoinQuote sellFirstExchange = buildMockQuote(9800, CoinTypeEnum.BTC);
 		IExchangeHandler handler = buildMockHandler(0, 0);
-		IDeal deal = CryptoBusinessLogic.calculateDeal(buyFirstExchange, sellSecondExchange, buySecondExchange,
+		IDeal deal = ArbitrageBusinessLogic.calculateDeal(buyFirstExchange, sellSecondExchange, buySecondExchange,
 				sellFirstExchange, handler, handler);
 		Assert.assertTrue(deal.getExpectedProfit() == 44); // (300/10000)*9800 -
 															// 250
@@ -37,7 +37,7 @@ public class CryptoBusinessLogicTest {
 		ICoinQuote buySecondExchange = buildMockQuote(10000, 9995, CoinTypeEnum.BTC);
 		ICoinQuote sellFirstExchange = buildMockQuote(9850, 9800, CoinTypeEnum.BTC);
 
-		IDeal deal = CryptoBusinessLogic.calculateDeal(buyFirstExchange, sellSecondExchange, buySecondExchange,
+		IDeal deal = ArbitrageBusinessLogic.calculateDeal(buyFirstExchange, sellSecondExchange, buySecondExchange,
 				sellFirstExchange, buildMockHandler(0.02, 0.01), buildMockHandler(0.04, 0.02));
 		double rounded = ((int)(deal.getExpectedProfit() * 100))/100.0;
 		assertTrue(rounded == 2.46); // (((((250*0.98*0.99)/250)*300*0.96)/10000)*0.96*0.98)*9800*0.98
@@ -62,7 +62,7 @@ public class CryptoBusinessLogicTest {
 		IExchangeHandler wexExchange = buildMockHandler(0.02, 0.01, ExchangeDetailsEnum.WEX,
 				Arrays.asList(ltcSecondExchange, btcSecondExchange, ethSecondExchange, dashSecondExchange));
 		
-		IDeal deal = CryptoBusinessLogic.calculateBestArbitrage(binanceExchange, wexExchange);
+		IDeal deal = ArbitrageBusinessLogic.calculateBestArbitrage(binanceExchange, wexExchange);
 		double rounded = ((int)(deal.getExpectedProfit() * 100))/100.0;
 		assertTrue(rounded == 145.44 );
 		
@@ -78,7 +78,7 @@ public class CryptoBusinessLogicTest {
 		Mockito.when(handler.getTransactionFee()).thenReturn(transactionFee);
 		Mockito.when(handler.getMoveCoinFee()).thenReturn(moveCoinFee);
 		Mockito.when(handler.getExchangeDetails()).thenReturn(details);
-		Mockito.when(handler.getQuotes()).thenReturn(quotes);
+		Mockito.when(handler.getALlCoinsQuotes()).thenReturn(quotes);
 		return handler;
 	}
 

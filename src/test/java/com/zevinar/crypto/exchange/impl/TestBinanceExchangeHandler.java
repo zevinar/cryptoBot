@@ -2,7 +2,6 @@ package com.zevinar.crypto.exchange.impl;
 
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import com.zevinar.crypto.exchange.interfcaes.ICoinTransaction;
@@ -13,12 +12,10 @@ public class TestBinanceExchangeHandler {
 	public void testGetSingleCoinQuotes() {
 		BinanceExchangeHandler handler = new BinanceExchangeHandler();
 		long currentTimeMillis = System.currentTimeMillis();
-		long fromTime = currentTimeMillis - 60*60*1000;
-		List<ICoinTransaction> singleCoinQuotes = handler.getSingleCoinTransactions(CoinTypeEnum.LTC, fromTime);
-		Assert.assertTrue(singleCoinQuotes.size() > 0);
-		//1514322346604
-		//1514322348542
-//		/String serverTime = HttpClient.CLIENT.doGet("https://api.binance.com/api/v1/time").getBody();
-//		System.out.println(String.format(" ServerTime:%s , MachineTime:%s", serverTime, currentTimeMillis));
+		long day = 24*60*60*1000;
+		long fromTime = currentTimeMillis - 3 * day;
+		long toTime = currentTimeMillis - 2 * day;
+//		List<ICoinTransaction> singleCoinQuotes = handler.getSingleCoinTransactions(CoinTypeEnum.LTC, fromTime, toTime);
+//		Assert.assertTrue(singleCoinQuotes.size() > 0);
 	}
 }

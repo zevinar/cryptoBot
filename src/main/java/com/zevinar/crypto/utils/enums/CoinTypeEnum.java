@@ -1,15 +1,21 @@
 package com.zevinar.crypto.utils.enums;
 
 public enum CoinTypeEnum {
-	BTC("Bit Coin"), LTC("Lite Coin"), ETH("Etherum"), DSH("Dash");
+	BTC("Bit Coin", "BTCUSDT"), LTC("Lite Coin", "LTCUSDT"), ETH("Etherum", "ETHUSDT"), DSH("Dash", null);
 	
 	private String coinName;
+	private String httpQuerySymbol;
 	
-	private CoinTypeEnum(String coinName){
+	private CoinTypeEnum(String coinName, String httpQuerySymbol){
 		this.coinName = coinName;
+		this.httpQuerySymbol = httpQuerySymbol;
 	}
 	
 	public String getCoinName() {
 		return coinName;
+	}
+
+	public String getHttpQuerySymbol() {
+		return httpQuerySymbol;
 	}
 }

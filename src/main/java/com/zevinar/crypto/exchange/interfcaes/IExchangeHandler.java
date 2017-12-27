@@ -22,10 +22,10 @@ public interface IExchangeHandler {
 	Double getMoveCoinFee();
 	
 	/**
-	 * Quotes of coin type starting from fromTime until currentTime
+	 * Transactions of coin type starting from fromTime until currentTime
 	 * @param coinType
 	 * @param fromTime
 	 * @return
 	 */
-	List<ICoinQuote> getSingleCoinQuotes(CoinTypeEnum coinType, long fromTime);
+	List<ICoinTransaction> getSingleCoinTransactions(CoinTypeEnum coinType, long fromTime);
 }

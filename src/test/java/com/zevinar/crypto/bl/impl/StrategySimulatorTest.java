@@ -25,7 +25,7 @@ public class StrategySimulatorTest {
 		ICoinTransaction firstTransaction = buildTransaction(startTime + 2000);
 		ICoinTransaction secondTransaction = buildTransaction(startTime + 3000);
 		// Last Segment
-		ICoinTransaction thirdTransaction = buildTransaction(startTime + StrategySimulator.DAY_IN_MS - 1000);
+		ICoinTransaction thirdTransaction = buildTransaction(startTime + StrategySimulator.DAY_IN_MS );
 		List<ICoinTransaction> fullDayTransactionsList = Arrays.asList(firstTransaction, secondTransaction,
 				thirdTransaction);
 
@@ -38,18 +38,14 @@ public class StrategySimulatorTest {
 		MatcherAssert.assertThat(firstSegment.size(), Matchers.is(2));
 		MatcherAssert.assertThat(firstSegment, Matchers.contains(firstTransaction, secondTransaction));
 		
-		
-		/*List<ICoinTransaction> allElementsFlat = breakDownDailyData.stream().flatMap(e -> e.stream()).collect(Collectors.toList());
-		System.out.println(allElementsFlat.size());
-		MatcherAssert.assertThat(allElementsFlat, Matchers.contains(firstTransaction, secondTransaction));
-		MatcherAssert.assertThat(allElementsFlat, Matchers.contains(thirdTransaction));*/
-		//TODO mshitrit check this
+		// Second Segment
 		List<ICoinTransaction> lastSegment = breakDownDailyData.get(breakDownDailyData.size() - NumberUtils.INTEGER_ONE);
 		MatcherAssert.assertThat(lastSegment.size(), Matchers.is(NumberUtils.INTEGER_ONE));
 		MatcherAssert.assertThat(lastSegment, Matchers.contains(thirdTransaction));
 		
-		
-
+		//Whole List
+		List<ICoinTransaction> allElementsFlat = breakDownDailyData.stream().flatMap(e -> e.stream()).collect(Collectors.toList());
+		MatcherAssert.assertThat(allElementsFlat.size(), Matchers.is(3));
 	}
 
 	private ICoinTransaction buildTransaction(long time) {

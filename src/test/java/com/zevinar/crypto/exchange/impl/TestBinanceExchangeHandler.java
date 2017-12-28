@@ -1,5 +1,8 @@
 package com.zevinar.crypto.exchange.impl;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import java.util.List;
 
 import org.junit.Test;
@@ -12,10 +15,12 @@ public class TestBinanceExchangeHandler {
 	public void testGetSingleCoinQuotes() {
 		BinanceExchangeHandler handler = new BinanceExchangeHandler();
 		long currentTimeMillis = System.currentTimeMillis();
-		long day = 24*60*60*1000;
-		long fromTime = currentTimeMillis - 3 * day;
-		long toTime = currentTimeMillis - 2 * day;
-//		List<ICoinTransaction> singleCoinQuotes = handler.getSingleCoinTransactions(CoinTypeEnum.LTC, fromTime, toTime);
-//		Assert.assertTrue(singleCoinQuotes.size() > 0);
+//		long day = 24*60*60*1000;
+		long fromTime = currentTimeMillis - 60 * 60 * 1000;
+		long toTime = currentTimeMillis;
+		//Last Hour
+		List<ICoinTransaction> singleCoinQuotes = handler.getSingleCoinTransactions(CoinTypeEnum.LTC, fromTime, toTime);
+		assertThat(singleCoinQuotes.size() > 0, is(true));
+
 	}
 }

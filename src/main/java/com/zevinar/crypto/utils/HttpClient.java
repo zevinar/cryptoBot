@@ -1,5 +1,6 @@
 package com.zevinar.crypto.utils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -23,8 +24,7 @@ public enum HttpClient {
 			EntityUtils.consume(entity1);
 			response = new HttpResponse(statusCode, body);
 		} catch (Exception e) {
-			//TODO mshitrit use StringUtils.Empty
-			response = new HttpResponse(HttpStatus.SC_INTERNAL_SERVER_ERROR, "");
+			response = new HttpResponse(HttpStatus.SC_INTERNAL_SERVER_ERROR, StringUtils.EMPTY);
 		}
 		
 		return response;

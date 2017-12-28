@@ -1,6 +1,10 @@
 package com.zevinar.crypto.bl.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.mockito.Mockito;
 import org.slf4j.Logger;
@@ -17,8 +21,9 @@ import com.zevinar.crypto.utils.enums.CoinTypeEnum;
 
 public class StrategySimulator {
 	private static final Logger LOG = LoggerFactory.getLogger(StrategySimulator.class);
+	public static final int DAY_IN_MS = 24 * 60 * 60 * 1000;
 	IExchangeInfoHandler exchangeHandler = new BinanceExchangeHandler();
-	//TODO mshitrit implement fake one to use in simulation
+	// TODO mshitrit implement fake one to use in simulation
 	IExchangeActionsHandler exchangeActionHandler = Mockito.mock(IExchangeActionsHandler.class);
 	// Sim Params
 	private static final int NUM_OF_DAYS = 30;
@@ -27,24 +32,37 @@ public class StrategySimulator {
 	public void runSimulation(ITradeStrategy strategy) {
 		long currentTimeMillis = System.currentTimeMillis();
 		CoinTypeEnum strategyCryptoCoinn = strategy.getCoinOfIntrest();
-		strategy.init(exchangeActionHandler, INITIAL_CASH_USD );
+		strategy.init(exchangeActionHandler, INITIAL_CASH_USD);
 		for (int i = 0; i < NUM_OF_DAYS; i++) {
-			int dayInMS = 24 * 60 * 60 * 1000;
-			List<ICoinTransaction> fullDayTransactionsList = exchangeHandler.getSingleCoinTransactions(strategyCryptoCoinn,
-					currentTimeMillis - (NUM_OF_DAYS - i) * dayInMS,
-					currentTimeMillis - (NUM_OF_DAYS - i + 1) * dayInMS);
-			List<List<ICoinTransaction>> subSetDataForStrategyCallback = breakDailyData(fullDayTransactionsList, strategy.getStrategySampleRateInSec());
-			subSetDataForStrategyCallback.stream().forEach( strategy::getDataCallbackMethod);
-			//Sleep in order not to overload Binance API
-			FunctionalCodeUtils.methodRunner( (RunnableThrows<InterruptedException>) () -> Thread.sleep(10000));
-			
+
+			final long startTime = currentTimeMillis - (NUM_OF_DAYS - i) * DAY_IN_MS;
+			List<ICoinTransaction> fullDayTransactionsList = exchangeHandler.getSingleCoinTransactions(
+					strategyCryptoCoinn, startTime, currentTimeMillis - (NUM_OF_DAYS - i + 1) * DAY_IN_MS);
+			List<List<ICoinTransaction>> subSetDataForStrategyCallback = breakDownDailyData(fullDayTransactionsList,
+					strategy.getStrategySampleRateInSec(), startTime);
+			subSetDataForStrategyCallback.stream().forEach(strategy::getDataCallbackMethod);
+			// Sleep in order not to overload Binance API
+			FunctionalCodeUtils.methodRunner((RunnableThrows<InterruptedException>) () -> Thread.sleep(10000));
+
 		}
 
 	}
 
-	private List<List<ICoinTransaction>> breakDailyData(List<ICoinTransaction> fullDayTransactionsList,
-			int strategySampleRateInSec) {
-		// TODO mshitrit implement
-		return null;
+	List<List<ICoinTransaction>> breakDownDailyData(List<ICoinTransaction> fullDayTransactionsList,
+			int strategySampleRateInSec, long startTime) {
+		
+		List<Predicate<ICoinTransaction>> predicateList = new ArrayList<>();
+		for (long i = startTime; i <= DAY_IN_MS + startTime; i = i
+				+ strategySampleRateInSec * 1000) {
+			long startTimeCurr = i;
+			long endTimeCurr = startTimeCurr + strategySampleRateInSec * 1000;
+			Predicate<ICoinTransaction> timeFilter = coinTrans -> coinTrans.getTransactionTime() >= startTimeCurr
+					&& coinTrans.getTransactionTime() < endTimeCurr;
+			predicateList.add(timeFilter);
+
+		}
+		//Each Element Represent Data Segment during strategySampleRateInSec
+		final Stream<List<ICoinTransaction>> streamByStrategySample = predicateList.stream().map( currPredicate -> fullDayTransactionsList.stream().filter(currPredicate).collect(Collectors.toList()));
+		return streamByStrategySample.collect(Collectors.toList());
 	}
 }

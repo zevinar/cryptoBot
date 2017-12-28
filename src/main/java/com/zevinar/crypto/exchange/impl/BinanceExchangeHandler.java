@@ -11,14 +11,14 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.zevinar.crypto.exchange.interfcaes.ICoinQuote;
 import com.zevinar.crypto.exchange.interfcaes.ICoinTransaction;
-import com.zevinar.crypto.exchange.interfcaes.IExchangeHandler;
+import com.zevinar.crypto.exchange.interfcaes.IExchangeInfoHandler;
 import com.zevinar.crypto.http.BinanceResponseElement;
 import com.zevinar.crypto.utils.HttpClient;
 import com.zevinar.crypto.utils.HttpClient.HttpResponse;
 import com.zevinar.crypto.utils.enums.CoinTypeEnum;
 import com.zevinar.crypto.utils.enums.ExchangeDetailsEnum;
 
-public class BinanceExchangeHandler implements IExchangeHandler {
+public class BinanceExchangeHandler implements IExchangeInfoHandler {
 	private static final Logger LOG = LoggerFactory.getLogger(BinanceExchangeHandler.class);
 	private HttpClient client = HttpClient.CLIENT;
 	private Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -51,6 +51,7 @@ public class BinanceExchangeHandler implements IExchangeHandler {
 
 	}
 	
+	@Override
 	public List<ICoinTransaction> getSingleCoinTransactions(CoinTypeEnum coinType, long fromTime, long toTime) {
 		 
 		

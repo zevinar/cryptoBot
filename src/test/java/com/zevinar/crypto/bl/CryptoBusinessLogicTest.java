@@ -11,7 +11,7 @@ import org.mockito.Mockito;
 
 import com.zevinar.crypto.bl.interfcaes.IDeal;
 import com.zevinar.crypto.exchange.interfcaes.ICoinQuote;
-import com.zevinar.crypto.exchange.interfcaes.IExchangeHandler;
+import com.zevinar.crypto.exchange.interfcaes.IExchangeInfoHandler;
 import com.zevinar.crypto.utils.enums.CoinTypeEnum;
 import com.zevinar.crypto.utils.enums.ExchangeDetailsEnum;
 
@@ -23,7 +23,7 @@ public class CryptoBusinessLogicTest {
 		ICoinQuote sellSecondExchange = buildMockQuote(300, CoinTypeEnum.LTC);
 		ICoinQuote buySecondExchange = buildMockQuote(10000, CoinTypeEnum.BTC);
 		ICoinQuote sellFirstExchange = buildMockQuote(9800, CoinTypeEnum.BTC);
-		IExchangeHandler handler = buildMockHandler(0, 0);
+		IExchangeInfoHandler handler = buildMockHandler(0, 0);
 		IDeal deal = ArbitrageBusinessLogic.calculateDeal(buyFirstExchange, sellSecondExchange, buySecondExchange,
 				sellFirstExchange, handler, handler);
 		Assert.assertTrue(deal.getExpectedProfit() == 44); // (300/10000)*9800 -
@@ -51,7 +51,7 @@ public class CryptoBusinessLogicTest {
 		ICoinQuote ltcFirstExchange = buildMockQuote(350, 346, CoinTypeEnum.LTC);
 		ICoinQuote btcFirstExchange = buildMockQuote(17000, 16900, CoinTypeEnum.BTC);
 		ICoinQuote ethFirstExchange = buildMockQuote(850, 833, CoinTypeEnum.ETH);
-		IExchangeHandler binanceExchange = buildMockHandler(0.02, 0.01, ExchangeDetailsEnum.BNC,
+		IExchangeInfoHandler binanceExchange = buildMockHandler(0.02, 0.01, ExchangeDetailsEnum.BNC,
 				Arrays.asList(ltcFirstExchange, btcFirstExchange, ethFirstExchange));
 		
 		
@@ -59,7 +59,7 @@ public class CryptoBusinessLogicTest {
 		ICoinQuote btcSecondExchange = buildMockQuote(15000, 14800, CoinTypeEnum.BTC);
 		ICoinQuote ethSecondExchange = buildMockQuote(700, 687, CoinTypeEnum.ETH);
 		ICoinQuote dashSecondExchange = buildMockQuote(900, 897, CoinTypeEnum.DSH);
-		IExchangeHandler wexExchange = buildMockHandler(0.02, 0.01, ExchangeDetailsEnum.WEX,
+		IExchangeInfoHandler wexExchange = buildMockHandler(0.02, 0.01, ExchangeDetailsEnum.WEX,
 				Arrays.asList(ltcSecondExchange, btcSecondExchange, ethSecondExchange, dashSecondExchange));
 		
 		IDeal deal = ArbitrageBusinessLogic.calculateBestArbitrage(binanceExchange, wexExchange);
@@ -68,13 +68,13 @@ public class CryptoBusinessLogicTest {
 		
 	}
 
-	private IExchangeHandler buildMockHandler(double transactionFee, double moveCoinFee) {
+	private IExchangeInfoHandler buildMockHandler(double transactionFee, double moveCoinFee) {
 		return buildMockHandler(transactionFee, moveCoinFee, null, null);
 	}
 
-	private IExchangeHandler buildMockHandler(double transactionFee, double moveCoinFee, ExchangeDetailsEnum details,
+	private IExchangeInfoHandler buildMockHandler(double transactionFee, double moveCoinFee, ExchangeDetailsEnum details,
 			List<ICoinQuote> quotes) {
-		IExchangeHandler handler = Mockito.mock(IExchangeHandler.class);
+		IExchangeInfoHandler handler = Mockito.mock(IExchangeInfoHandler.class);
 		Mockito.when(handler.getTransactionFee()).thenReturn(transactionFee);
 		Mockito.when(handler.getMoveCoinFee()).thenReturn(moveCoinFee);
 		Mockito.when(handler.getExchangeDetails()).thenReturn(details);

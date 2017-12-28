@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import com.zevinar.crypto.bl.impl.DealImpl;
 import com.zevinar.crypto.bl.interfcaes.IDeal;
 import com.zevinar.crypto.exchange.interfcaes.ICoinQuote;
-import com.zevinar.crypto.exchange.interfcaes.IExchangeHandler;
+import com.zevinar.crypto.exchange.interfcaes.IExchangeInfoHandler;
 import com.zevinar.crypto.utils.datastruct.Wrapper;
 import com.zevinar.crypto.utils.enums.CoinTypeEnum;
  
@@ -25,7 +25,7 @@ public final class ArbitrageBusinessLogic {
 	 * @param secondExchange
 	 * @return
 	 */
-	public static IDeal calculateBestArbitrage(IExchangeHandler firstExchange, IExchangeHandler secondExchange) {
+	public static IDeal calculateBestArbitrage(IExchangeInfoHandler firstExchange, IExchangeInfoHandler secondExchange) {
 		List<ICoinQuote> quotesFirst = firstExchange.getALlCoinsQuotes();
 		List<ICoinQuote> quotesSecond = secondExchange.getALlCoinsQuotes();
 		Map<CoinTypeEnum, ICoinQuote> firstQuoteMap = quotesFirst.stream()
@@ -59,14 +59,14 @@ public final class ArbitrageBusinessLogic {
 	}
 
 	private static void updateBestDeal(ICoinQuote buyFirstExchange, ICoinQuote sellSecondExchange,
-			ICoinQuote buySecondExchange, ICoinQuote sellFirstExchange, IExchangeHandler firstExchange, IExchangeHandler secondExchange, Wrapper<IDeal> bestWrapper) {
+			ICoinQuote buySecondExchange, ICoinQuote sellFirstExchange, IExchangeInfoHandler firstExchange, IExchangeInfoHandler secondExchange, Wrapper<IDeal> bestWrapper) {
 		IDeal current = calculateDeal(buyFirstExchange, sellSecondExchange, buySecondExchange, sellFirstExchange, firstExchange, secondExchange);
 		if (current.compareTo(bestWrapper.getInnerElement()) > 0) {
 			bestWrapper.setInnerElement(current);
 		}
 	}
 	protected static IDeal calculateDeal(ICoinQuote buyFirstExchange, ICoinQuote sellSecondExchange,
-			ICoinQuote buySecondExchange, ICoinQuote sellFirstExchange, IExchangeHandler firstExchange, IExchangeHandler secondExchange) {
+			ICoinQuote buySecondExchange, ICoinQuote sellFirstExchange, IExchangeInfoHandler firstExchange, IExchangeInfoHandler secondExchange) {
 		final BigDecimal percentageAfterFirstExchangeTransactionFee = BigDecimal.valueOf(1 - firstExchange.getTransactionFee());
 		final BigDecimal percentageAfterSecondExchangeTransactionFee = BigDecimal.valueOf(1 - secondExchange.getTransactionFee());
 		

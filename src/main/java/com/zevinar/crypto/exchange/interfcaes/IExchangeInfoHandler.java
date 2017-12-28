@@ -3,23 +3,14 @@ package com.zevinar.crypto.exchange.interfcaes;
 import java.util.List;
 
 import com.zevinar.crypto.utils.enums.CoinTypeEnum;
-import com.zevinar.crypto.utils.enums.ExchangeDetailsEnum;
 
-public interface IExchangeHandler {
-	ExchangeDetailsEnum getExchangeDetails();
+public interface IExchangeInfoHandler extends IBaseExchangeHandler {
+
 	/**
 	 * List Of Current Quotes of all coins supported in exchange in US Dollar.
 	 * @return
 	 */
 	List<ICoinQuote> getALlCoinsQuotes();
-	
-	/**
-	 * Transaction fee, for example for 1% return 0.01.<br>
-	 * @return
-	 */
-	Double getTransactionFee();
-	
-	Double getMoveCoinFee();
 	
 	/**
 	 * Transactions of coin type starting from fromTime until currentTime
@@ -28,4 +19,6 @@ public interface IExchangeHandler {
 	 * @return
 	 */
 	List<ICoinTransaction> getSingleCoinTransactions(CoinTypeEnum coinType, long fromTime);
+	
+	List<ICoinTransaction> getSingleCoinTransactions(CoinTypeEnum coinType, long fromTime, long toTime);
 }

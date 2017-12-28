@@ -2,7 +2,7 @@ package com.zevinar.crypto.bl.impl;
 
 import com.zevinar.crypto.bl.interfcaes.IDeal;
 import com.zevinar.crypto.exchange.interfcaes.ICoinQuote;
-import com.zevinar.crypto.exchange.interfcaes.IExchangeHandler;
+import com.zevinar.crypto.exchange.interfcaes.IExchangeInfoHandler;
 
 public class DealImpl implements IDeal {
 
@@ -10,12 +10,12 @@ public class DealImpl implements IDeal {
 	private ICoinQuote sellSecondExchange;
 	private ICoinQuote buySecondExchange;
 	private ICoinQuote sellFirstExchange;
-	private IExchangeHandler firstExchange;
-	private IExchangeHandler secondExchange;
+	private IExchangeInfoHandler firstExchange;
+	private IExchangeInfoHandler secondExchange;
 	private double profit;
 
 	public DealImpl(ICoinQuote buyFirstExchange, ICoinQuote sellSecondExchange, ICoinQuote buySecondExchange,
-			ICoinQuote sellFirstExchange, IExchangeHandler firstExchange, IExchangeHandler secondExchange,
+			ICoinQuote sellFirstExchange, IExchangeInfoHandler firstExchange, IExchangeInfoHandler secondExchange,
 			double profit) {
 		this.buyFirstExchange = buyFirstExchange;
 		this.sellSecondExchange = sellSecondExchange;
@@ -52,12 +52,12 @@ public class DealImpl implements IDeal {
 	}
 
 	@Override
-	public IExchangeHandler getFirstExchange() {
+	public IExchangeInfoHandler getFirstExchange() {
 		return firstExchange;
 	}
 
 	@Override
-	public IExchangeHandler getSecondExchange() {
+	public IExchangeInfoHandler getSecondExchange() {
 		return secondExchange;
 	}
 

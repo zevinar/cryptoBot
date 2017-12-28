@@ -1,7 +1,7 @@
 package com.zevinar.crypto.bl.interfcaes;
 
 import com.zevinar.crypto.exchange.interfcaes.ICoinQuote;
-import com.zevinar.crypto.exchange.interfcaes.IExchangeHandler;
+import com.zevinar.crypto.exchange.interfcaes.IExchangeInfoHandler;
 
 public interface IDeal extends Comparable<IDeal>{
 	Double getExpectedProfit();
@@ -12,8 +12,8 @@ public interface IDeal extends Comparable<IDeal>{
 	ICoinQuote getCoinSoldAtFirstExchange();
 	ICoinQuote getCoinBoughtAtSecondExchange();
 	ICoinQuote getCoinSoldAtSecondExchange();
-	IExchangeHandler getFirstExchange();
-	IExchangeHandler getSecondExchange();
+	IExchangeInfoHandler getFirstExchange();
+	IExchangeInfoHandler getSecondExchange();
 	
 	static IDeal getDummyDeal() {
 		return new IDeal() {
@@ -48,13 +48,13 @@ public interface IDeal extends Comparable<IDeal>{
 			}
 
 			@Override
-			public IExchangeHandler getFirstExchange() {
+			public IExchangeInfoHandler getFirstExchange() {
 				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
-			public IExchangeHandler getSecondExchange() {
+			public IExchangeInfoHandler getSecondExchange() {
 				// TODO Auto-generated method stub
 				return null;
 			}

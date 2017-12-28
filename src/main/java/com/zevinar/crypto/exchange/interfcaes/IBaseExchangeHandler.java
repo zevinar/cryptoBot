@@ -1,5 +1,8 @@
 package com.zevinar.crypto.exchange.interfcaes;
 
+import java.util.List;
+
+import com.zevinar.crypto.utils.enums.CoinTypeEnum;
 import com.zevinar.crypto.utils.enums.ExchangeDetailsEnum;
 
 public interface IBaseExchangeHandler {
@@ -11,5 +14,7 @@ public interface IBaseExchangeHandler {
 	 */
 	Double getTransactionFee();
 	
-	Double getMoveCoinFee();
+	
+	List<ICoinTransaction> getSingleCoinTransactions(CoinTypeEnum coinType, long fromTime, long toTime);
+
 }

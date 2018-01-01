@@ -1,5 +1,6 @@
 package com.zevinar.crypto.exchange.interfcaes;
 
+import com.zevinar.crypto.utils.enums.CoinTypeEnum;
 import com.zevinar.crypto.utils.enums.ExchangeDetailsEnum;
 
 public interface IBaseExchangeHandler {
@@ -11,6 +12,8 @@ public interface IBaseExchangeHandler {
 	 */
 	Double getTransactionFee();
 	
-	
+	ITransactionResult postBuy(CoinTypeEnum transactionCoinType, double wantedBuyPrice);
+
+ 
 
 }

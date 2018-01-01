@@ -11,9 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import com.zevinar.crypto.exchange.impl.BinanceExchangeHandler;
 import com.zevinar.crypto.exchange.interfcaes.ICoinTransaction;
-import com.zevinar.crypto.exchange.interfcaes.IExchangeHandlerForSimulator;
-import com.zevinar.crypto.exchange.interfcaes.IExchangeHandlerForStrategy;
-import com.zevinar.crypto.exchange.interfcaes.ITradeStrategy;
+import com.zevinar.crypto.exchange.interfcaes.IExchangeHandler;
+import com.zevinar.crypto.exchange.interfcaes.IStrategy;
 import com.zevinar.crypto.utils.FunctionalCodeUtils;
 import com.zevinar.crypto.utils.FunctionalCodeUtils.RunnableThrows;
 import com.zevinar.crypto.utils.enums.CoinTypeEnum;
@@ -21,17 +20,15 @@ import com.zevinar.crypto.utils.enums.CoinTypeEnum;
 public class StrategySimulator {
 	private static final Logger LOG = LoggerFactory.getLogger(StrategySimulator.class);
 	public static final int DAY_IN_MS = 24 * 60 * 60 * 1000;
-	IExchangeHandlerForSimulator exchangeHandler = new BinanceExchangeHandler();
-	// TODO mshitrit implement fake one to use in simulation
-	IExchangeHandlerForStrategy exchangeActionHandler = null;
+	IExchangeHandler exchangeHandler = new BinanceExchangeHandler();
 	// Sim Params
 	private static final int NUM_OF_DAYS = 30;
 	private static final double INITIAL_CASH_USD = 100;
 
-	public void runSimulation(ITradeStrategy strategy) {
+	public void runSimulation(IStrategy strategy) {
 		long currentTimeMillis = System.currentTimeMillis();
 		CoinTypeEnum strategyCryptoCoinn = strategy.getCoinOfIntrest();
-		strategy.init(exchangeActionHandler, INITIAL_CASH_USD);
+		strategy.init(exchangeHandler, INITIAL_CASH_USD);
 		for (int i = 0; i < NUM_OF_DAYS; i++) {
 
 			final long startTime = currentTimeMillis - (NUM_OF_DAYS - i) * DAY_IN_MS;

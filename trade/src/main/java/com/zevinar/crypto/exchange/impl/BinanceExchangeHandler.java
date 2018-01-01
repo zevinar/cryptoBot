@@ -12,14 +12,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.zevinar.crypto.exchange.interfcaes.ICoinTransaction;
-import com.zevinar.crypto.exchange.interfcaes.IExchangeHandlerForSimulator;
+import com.zevinar.crypto.exchange.interfcaes.IExchangeHandler;
+import com.zevinar.crypto.exchange.interfcaes.IOpenTransaction;
+import com.zevinar.crypto.exchange.interfcaes.ITransactionResult;
 import com.zevinar.crypto.http.BinanceResponseElement;
 import com.zevinar.crypto.utils.HttpClient;
 import com.zevinar.crypto.utils.HttpClient.HttpResponse;
 import com.zevinar.crypto.utils.enums.CoinTypeEnum;
 import com.zevinar.crypto.utils.enums.ExchangeDetailsEnum;
 
-public class BinanceExchangeHandler implements IExchangeHandlerForSimulator {
+public class BinanceExchangeHandler implements IExchangeHandler {
 	private static final Logger LOG = LoggerFactory.getLogger(BinanceExchangeHandler.class);
 	private HttpClient client = HttpClient.CLIENT;
 	private Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -38,11 +40,7 @@ public class BinanceExchangeHandler implements IExchangeHandlerForSimulator {
 
 
 
-	@Override
-	public List<ICoinTransaction> getSingleCoinTransactions(CoinTypeEnum coinType, long fromTime) {
-		return getSingleCoinTransactions(coinType, fromTime, System.currentTimeMillis());
-
-	}
+	
 	
 	@Override
 	public List<ICoinTransaction> getSingleCoinTransactions(CoinTypeEnum coinType, long fromTime, long toTime) {
@@ -59,6 +57,22 @@ public class BinanceExchangeHandler implements IExchangeHandlerForSimulator {
 		List<ICoinTransaction> coinTransactionList = gson.fromJson(doGet.getBody(), listType);
 		coinTransactionList.forEach(element -> element.setCoinType(coinType));
 		return coinTransactionList;
+	}
+
+
+
+	@Override
+	public List<IOpenTransaction> getOpenTransactions() {
+		// TODO mshitrit implement for functional
+		return null;
+	}
+
+
+
+	@Override
+	public ITransactionResult postBuy(CoinTypeEnum transactionCoinType, double wantedBuyPrice) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

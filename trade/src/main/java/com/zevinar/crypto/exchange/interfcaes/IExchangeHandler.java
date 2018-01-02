@@ -13,7 +13,9 @@ public interface IExchangeHandler extends IBaseExchangeHandler {
 	 */
 	List<ICoinTransaction> getSingleCoinTransactions(CoinTypeEnum coinType, long fromTime, long toTime);
 
-	List<IOpenTransaction> getOpenTransactions();
+	
+
+	
 }
 
 	

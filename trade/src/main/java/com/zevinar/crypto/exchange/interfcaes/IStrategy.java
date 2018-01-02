@@ -9,5 +9,5 @@ public interface IStrategy {
 	int getStrategySampleRateInSec();
 	CoinTypeEnum getCoinOfIntrest();
 	boolean analyzeData(List<ICoinTransaction> data);
-	void init(IExchangeHandler exchangeHandler, double initialCashUsd);
+	void init(IExchangeHandler exchangeHandler);
 }

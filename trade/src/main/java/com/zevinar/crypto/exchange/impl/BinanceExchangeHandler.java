@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,40 +27,46 @@ public class BinanceExchangeHandler implements IExchangeHandler {
 	private HttpClient client = HttpClient.CLIENT;
 	private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	private CacheHandler cacheHandler = CacheHandler.INSTANCE;
+
 	@Override
 	public ExchangeDetailsEnum getExchangeDetails() {
 		return ExchangeDetailsEnum.BNC;
 	}
-
-
 
 	@Override
 	public Double getTransactionFee() {
 		return 0.02;
 	}
 
-
-
-	
-	
 	@Override
 	public List<ICoinTransaction> getSingleCoinTransactions(CoinTypeEnum coinType, long fromTime, long toTime) {
-		Optional<List<ICoinTransaction>> optionalRec = cacheHandler.getRecords(coinType, fromTime, toTime );
+		Optional<List<ICoinTransaction>> optionalRec = cacheHandler.getRecords(coinType, fromTime, toTime);
 		return optionalRec.orElseGet(cacheHandler.fillCache(getRecordsFromExchange(coinType, fromTime, toTime)));
 
 	}
 
 	private List<ICoinTransaction> getRecordsFromExchange(CoinTypeEnum coinType, long fromTime, long toTime) {
 		String urlTemplate = "https://api.binance.com/api/v1/aggTrades?symbol=%s&startTime=%s&endTime=%s";
-		String queryUrl = String.format(urlTemplate, coinType.getHttpQuerySymbol(), fromTime, toTime);
+		String queryUrl = String.format(urlTemplate, getHttpQuerySymbol(coinType), fromTime, toTime);
 		HttpResponse doGet = client.doGet(queryUrl);
-		Type listType = new TypeToken<ArrayList<BinanceResponseElement>>(){}.getType();
+		Type listType = new TypeToken<ArrayList<BinanceResponseElement>>() {
+		}.getType();
 		List<ICoinTransaction> coinTransactionList = gson.fromJson(doGet.getBody(), listType);
 		coinTransactionList.forEach(element -> element.setCoinType(coinType));
 		return coinTransactionList;
 	}
 
-
+	private String getHttpQuerySymbol(CoinTypeEnum coinType) {
+		switch (coinType) {
+		case LTC:
+			return "LTCUSDT";
+		case BTC:
+			return "BTCUSDT";
+		default:
+			throw new NotImplementedException(
+					String.format("getHttpQuerySymbol not implemented for coinType: %s", coinType.getCoinName()));
+		}
+	}
 
 	@Override
 	public List<IOpenTransaction> getOpenTransactions() {
@@ -67,12 +74,22 @@ public class BinanceExchangeHandler implements IExchangeHandler {
 		return null;
 	}
 
-
-
 	@Override
 	public ITransactionResult postBuy(CoinTypeEnum transactionCoinType, double wantedBuyPrice) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public double getCoinBalance(CoinTypeEnum coinType) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getCurrentCashUSD() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

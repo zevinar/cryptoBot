@@ -28,7 +28,7 @@ public class StrategySimulator {
 	public void runSimulation(IStrategy strategy) {
 		long currentTimeMillis = System.currentTimeMillis();
 		CoinTypeEnum strategyCryptoCoinn = strategy.getCoinOfIntrest();
-		strategy.init(exchangeHandler, INITIAL_CASH_USD);
+		strategy.init(exchangeHandler);
 		for (int i = 0; i < NUM_OF_DAYS; i++) {
 
 			final long startTime = currentTimeMillis - (NUM_OF_DAYS - i) * DAY_IN_MS;

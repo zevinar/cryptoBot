@@ -8,7 +8,7 @@
     </parent>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <xchange.version>4.3.2-SNAPSHOT</xchange.version>
+        <xchange.version>4.3.2</xchange.version>
     </properties>
 
 
@@ -81,38 +81,38 @@
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-ANX</artifactId>
+            <artifactId>xchange-anx</artifactId>
             <version>${xchange.version}</version>
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-Bitbay</artifactId>
+            <artifactId>xchange-bitbay</artifactId>
             <version>${xchange.version}</version>
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-Bitfinex</artifactId>
+            <artifactId>xchange-bitfinex</artifactId>
             <version>${xchange.version}</version>
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-BitMarket</artifactId>
+            <artifactId>xchange-bitmarket</artifactId>
             <version>${xchange.version}</version>
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-Bitstamp</artifactId>
+            <artifactId>xchange-bitstamp</artifactId>
             <version>${xchange.version}</version>
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-Bittrex</artifactId>
+            <artifactId>xchange-bittrex</artifactId>
             <version>${xchange.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-Bleutrade</artifactId>
+            <artifactId>xchange-bleutrade</artifactId>
             <version>${xchange.version}</version>
         </dependency>
         <dependency>
@@ -123,13 +123,13 @@
 
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-BTCTrade</artifactId>
+            <artifactId>xchange-btctrade</artifactId>
             <version>${xchange.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-CampBX</artifactId>
+            <artifactId>xchange-campbx</artifactId>
             <version>${xchange.version}</version>
         </dependency>
         <dependency>
@@ -140,41 +140,41 @@
 
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-Coinbase</artifactId>
+            <artifactId>xchange-coinbase</artifactId>
             <version>${xchange.version}</version>
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-Coinfloor</artifactId>
+            <artifactId>xchange-coinfloor</artifactId>
             <version>${xchange.version}</version>
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-Coinmate</artifactId>
-            <version>${xchange.version}</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-CryptoFacilities</artifactId>
+            <artifactId>xchange-coinmate</artifactId>
             <version>${xchange.version}</version>
         </dependency>
 
 
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-GateCoin</artifactId>
+            <artifactId>xchange-cryptofacilities</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-gatecoin</artifactId>
             <version>${xchange.version}</version>
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-GDAX</artifactId>
+            <artifactId>xchange-gdax</artifactId>
             <version>${xchange.version}</version>
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-HitBTC</artifactId>
+            <artifactId>xchange-hitbtc</artifactId>
             <version>${xchange.version}</version>
         </dependency>
 
@@ -185,17 +185,17 @@
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-itBit</artifactId>
+            <artifactId>xchange-itbit</artifactId>
             <version>${xchange.version}</version>
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-Koineks</artifactId>
+            <artifactId>xchange-koineks</artifactId>
             <version>${xchange.version}</version>
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-Kraken</artifactId>
+            <artifactId>xchange-kraken</artifactId>
             <version>${xchange.version}</version>
         </dependency>
 
@@ -207,7 +207,7 @@
 
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-OKCoin</artifactId>
+            <artifactId>xchange-okcoin</artifactId>
             <version>${xchange.version}</version>
         </dependency>
 
@@ -218,12 +218,12 @@
         <!--</dependency>-->
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-Quoine</artifactId>
+            <artifactId>xchange-quoine</artifactId>
             <version>${xchange.version}</version>
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-Ripple</artifactId>
+            <artifactId>xchange-ripple</artifactId>
             <version>${xchange.version}</version>
         </dependency>
 
@@ -234,7 +234,7 @@
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-Vircurex</artifactId>
+            <artifactId>xchange-vircurex</artifactId>
             <version>${xchange.version}</version>
         </dependency>
 

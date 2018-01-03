@@ -15,15 +15,7 @@
     <artifactId>commons</artifactId>
     <dependencies>
 
-        <dependency>
-            <groupId>org.knowm.xchart</groupId>
-            <artifactId>xchart</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
             <artifactId>xchange-core</artifactId>

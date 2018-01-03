@@ -31,3 +31,12 @@ _ReSharper*/
 #Nuget packages folder
 packages/
 /target/
+.idea
+*.iml
+.idea/
+arbitrage/arbitrage.iml
+commons/commons.iml
+commons/repo/
+cryptobot.iml
+repo/
+trade/trade.iml

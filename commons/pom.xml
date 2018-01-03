@@ -1,11 +1,260 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.zevinar.crypto</groupId>
-		<artifactId>cryptobot</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>
-	
-	<artifactId>commons</artifactId>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.zevinar.crypto</groupId>
+        <artifactId>cryptobot</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <xchange.version>4.3.2</xchange.version>
+    </properties>
+
+
+    <artifactId>commons</artifactId>
+    <dependencies>
+
+
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-core</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <!-- https://github.com/timmolter/XChange/wiki/Exchange-Support -->
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-dsx</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-cryptopia</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-btcturk</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-paribu</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-liqui</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-gateio</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-koinim</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-acx</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-bitflyer</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-wex</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-binance</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-anx</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-bitbay</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-bitfinex</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-bitmarket</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-bitstamp</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-bittrex</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-bleutrade</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-btcc</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-btctrade</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-campbx</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-cexio</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-coinbase</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-coinfloor</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-coinmate</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-cryptofacilities</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-gatecoin</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-gdax</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-hitbtc</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-independentreserve</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-itbit</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-koineks</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-kraken</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-mercadobitcoin</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-okcoin</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+
+        <!--<dependency>-->
+        <!--<groupId>org.knowm.xchange</groupId>-->
+        <!--<artifactId>xchange-Poloniex</artifactId>-->
+        <!--<version>${xchange.version}</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-quoine</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-ripple</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-therock</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-vircurex</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+
+
+    </dependencies>
+
+
+    <repositories>
+        <!-- this is for the XChange SNAPSHOT code -->
+        <repository>
+            <id>sonatype-oss-snapshot</id>
+            <snapshots/>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+
+        <!-- this is for any jars registered in the project's /repo directory -->
+        <repository>
+            <id>project-local</id>
+            <name>project-local</name>
+            <url>file:${project.basedir}/repo</url>
+        </repository>
+    </repositories>
 </project>

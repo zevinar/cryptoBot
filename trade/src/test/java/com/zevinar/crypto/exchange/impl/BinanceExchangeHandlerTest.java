@@ -12,7 +12,7 @@ import com.zevinar.crypto.bl.impl.BinanceTradeExchangeHandler;
 import com.zevinar.crypto.exchange.interfcaes.ICoinTransaction;
 import com.zevinar.crypto.utils.enums.CoinTypeEnum;
 
-public class TestBinanceExchangeHandler {
+public class BinanceExchangeHandlerTest {
 	@Test @Ignore
 	public void testGetSingleCoinQuotes() {
 		BinanceTradeExchangeHandler handler = new BinanceTradeExchangeHandler();

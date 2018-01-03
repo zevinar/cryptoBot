@@ -16,10 +16,8 @@ public interface IBaseExchangeHandler {
 	 */
 	Double getTransactionFee();
 
-	ITransactionResult postBuy(CoinTypeEnum coinType, double wantedBuyPrice);
+	ITransactionResult postTransactionRequest(IOpenTransaction request);
 	
-	ITransactionResult postSell(CoinTypeEnum coinType, double wantedSellPrice);
-
 	List<IOpenTransaction> getOpenTransactions();
 
 	double getCoinBalance(CoinTypeEnum coinType);

@@ -23,23 +23,25 @@ import com.zevinar.crypto.utils.enums.CoinTypeEnum;
 
 public class BinanceTradeExchangeHandler extends  BinanceExchangeHandler implements IExchangeHandler {
 	private static final Logger LOG = LoggerFactory.getLogger(BinanceTradeExchangeHandler.class);
-	private HttpClient client = HttpClient.CLIENT;
-	private Gson gson = new GsonBuilder().setPrettyPrinting().create();
-	private CacheHandler cacheHandler = CacheHandler.INSTANCE;
+	private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 
 
 	@Override
 	public List<ICoinTransaction> getSingleCoinTransactions(CoinTypeEnum coinType, long fromTime, long toTime) {
-		Optional<List<ICoinTransaction>> optionalRec = cacheHandler.getRecords(coinType, fromTime, toTime);
-		return optionalRec.orElseGet(cacheHandler.fillCache(getRecordsFromExchange(coinType, fromTime, toTime)));
+		return getSingleCoinTransactionsWithCache(coinType, fromTime, toTime);
 
 	}
 
-	private List<ICoinTransaction> getRecordsFromExchange(CoinTypeEnum coinType, long fromTime, long toTime) {
+	public static List<ICoinTransaction> getSingleCoinTransactionsWithCache(CoinTypeEnum coinType, long fromTime, long toTime){
+		Optional<List<ICoinTransaction>> optionalRec =  CacheHandler.INSTANCE.getRecords(coinType, fromTime, toTime);
+		return optionalRec.orElseGet( CacheHandler.INSTANCE.fillCache(getRecordsFromExchange(coinType, fromTime, toTime)));
+
+	}
+	private static List<ICoinTransaction> getRecordsFromExchange(CoinTypeEnum coinType, long fromTime, long toTime) {
 		String urlTemplate = "https://api.binance.com/api/v1/aggTrades?symbol=%s&startTime=%s&endTime=%s";
 		String queryUrl = String.format(urlTemplate, getHttpQuerySymbol(coinType), fromTime, toTime);
-		HttpResponse doGet = client.doGet(queryUrl);
+		HttpResponse doGet = HttpClient.CLIENT.doGet(queryUrl);
 		Type listType = new TypeToken<ArrayList<BinanceResponseElement>>() {
 		}.getType();
 		List<ICoinTransaction> coinTransactionList = gson.fromJson(doGet.getBody(), listType);
@@ -47,7 +49,7 @@ public class BinanceTradeExchangeHandler extends  BinanceExchangeHandler impleme
 		return coinTransactionList;
 	}
 
-	private String getHttpQuerySymbol(CoinTypeEnum coinType) {
+	private static String getHttpQuerySymbol(CoinTypeEnum coinType) {
 		switch (coinType) {
 		case LTC:
 			return "LTCUSDT";

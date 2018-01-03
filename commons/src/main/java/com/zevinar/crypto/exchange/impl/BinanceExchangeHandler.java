@@ -32,7 +32,7 @@ public class BinanceExchangeHandler implements IBaseExchangeHandler{
 	}
 
 	@Override
-	public ITransactionResult postBuy(CoinTypeEnum transactionCoinType, double wantedBuyPrice) {
+	public ITransactionResult postTransactionRequest(IOpenTransaction request) {
 		// TODO mshitrit implement for functional
 		return null;
 	}
@@ -49,10 +49,6 @@ public class BinanceExchangeHandler implements IBaseExchangeHandler{
 		return 0;
 	}
 
-	@Override
-	public ITransactionResult postSell(CoinTypeEnum coinType, double wantedSellPrice) {
-		// TODO mshitrit implement for functional
-		return null;
-	}
+	
 
 }

@@ -15,6 +15,7 @@ import com.zevinar.crypto.exchange.interfcaes.IOpenTransaction;
 import com.zevinar.crypto.exchange.interfcaes.IStrategy;
 import com.zevinar.crypto.utils.Constants;
 import com.zevinar.crypto.utils.enums.CoinTypeEnum;
+import com.zevinar.crypto.utils.enums.TransactionTypeEnum;
 
 public class SimpleStrategy implements IStrategy {
 	private static final Logger LOG = LoggerFactory.getLogger(SimpleStrategy.class);
@@ -48,16 +49,7 @@ public class SimpleStrategy implements IStrategy {
 
 			}
 			if (hasOpenTransactions) {
-				IOpenTransaction openTransaction = openTransactions.stream().findFirst().get();
-				switch (openTransaction.getTransactionType()) {
-				case BUY:
-					break;
-				case SELL:
-					break;
-				default:
-					throw new NotImplementedException(String.format("Transaction Type Not Implemented For : %s",
-							openTransaction.getTransactionType()));
-				}
+				handleOpenTransactions(openTransactions);
 			} else if (hasCoinsForTrade) {
 				actualBuyPrice = wantedBuyPrice;
 				LOG.info("Bought: {} At Price: {}", coinType.getCoinName(),
@@ -65,7 +57,8 @@ public class SimpleStrategy implements IStrategy {
 				wantedSellPrice = (NumberUtils.DOUBLE_ONE - SELL_PROFIT) * actualBuyPrice;
 				LOG.info("Posting Sell: {} At Price: {}", coinType.getCoinName(),
 						wantedSellPrice);
-				exchangeHandler.postSell(coinType, wantedSellPrice);
+				exchangeHandler.postTransactionRequest(new OpenTransactionImpl(coinType, TransactionTypeEnum.SELL, wantedSellPrice, 100));
+
 
 			} else if (hasCashForTrade) {
 				actualSellPrice = wantedSellPrice;
@@ -78,7 +71,7 @@ public class SimpleStrategy implements IStrategy {
 				wantedBuyPrice = (actualSellPrice > NumberUtils.DOUBLE_ZERO) ? (NumberUtils.DOUBLE_ONE - BID_DISCOUNT) * actualSellPrice: (NumberUtils.DOUBLE_ONE - BID_DISCOUNT) * lastCoinPrice;
 				LOG.info("Posting Buy: {} At Price: {}", coinType.getCoinName(),
 						wantedBuyPrice);
-				exchangeHandler.postBuy(iCoinTransaction.getTransactionCoinType(), wantedBuyPrice);
+				exchangeHandler.postTransactionRequest(new OpenTransactionImpl(coinType, TransactionTypeEnum.BUY, wantedBuyPrice, 100));
 
 			} else {
 				LOG.error("Illegal State at analyzeData method ");
@@ -88,6 +81,20 @@ public class SimpleStrategy implements IStrategy {
 		}
 		return continueAnalysis;
 
+	}
+
+	private void handleOpenTransactions(List<IOpenTransaction> openTransactions) {
+		 
+		IOpenTransaction openTransaction = openTransactions.get(NumberUtils.INTEGER_ZERO);
+		switch (openTransaction.getTransactionType()) {
+		case BUY:
+			break;
+		case SELL:
+			break;
+		default:
+			throw new NotImplementedException(String.format("Transaction Type Not Implemented For : %s",
+					openTransaction.getTransactionType()));
+		}
 	}
 
 	@Override

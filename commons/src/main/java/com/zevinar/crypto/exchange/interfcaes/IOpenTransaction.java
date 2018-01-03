@@ -1,5 +1,6 @@
 package com.zevinar.crypto.exchange.interfcaes;
 
+import com.zevinar.crypto.utils.enums.CoinTypeEnum;
 import com.zevinar.crypto.utils.enums.TransactionTypeEnum;
 
 /**
@@ -8,5 +9,8 @@ import com.zevinar.crypto.utils.enums.TransactionTypeEnum;
  *
  */
 public interface IOpenTransaction{
+	CoinTypeEnum getCoinType();
 	TransactionTypeEnum getTransactionType();
+	double getCoinUsdPrice();
+	double getTransactionAmount();
 }

@@ -10,10 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zevinar.crypto.exchange.impl.BinanceExchangeHandler;
+import com.zevinar.crypto.exchange.impl.SimExchangeHandler;
 import com.zevinar.crypto.exchange.interfcaes.ICoinTransaction;
-import com.zevinar.crypto.exchange.interfcaes.IExchangeHandlerForSimulator;
-import com.zevinar.crypto.exchange.interfcaes.IExchangeHandlerForStrategy;
-import com.zevinar.crypto.exchange.interfcaes.ITradeStrategy;
+import com.zevinar.crypto.exchange.interfcaes.IExchangeHandler;
+import com.zevinar.crypto.exchange.interfcaes.IStrategy;
 import com.zevinar.crypto.utils.FunctionalCodeUtils;
 import com.zevinar.crypto.utils.FunctionalCodeUtils.RunnableThrows;
 import com.zevinar.crypto.utils.enums.CoinTypeEnum;
@@ -21,17 +21,15 @@ import com.zevinar.crypto.utils.enums.CoinTypeEnum;
 public class StrategySimulator {
 	private static final Logger LOG = LoggerFactory.getLogger(StrategySimulator.class);
 	public static final int DAY_IN_MS = 24 * 60 * 60 * 1000;
-	IExchangeHandlerForSimulator exchangeHandler = new BinanceExchangeHandler();
-	// TODO mshitrit implement fake one to use in simulation
-	IExchangeHandlerForStrategy exchangeActionHandler = null;
+	SimExchangeHandler exchangeHandler = new SimExchangeHandler();
 	// Sim Params
 	private static final int NUM_OF_DAYS = 30;
 	private static final double INITIAL_CASH_USD = 100;
 
-	public void runSimulation(ITradeStrategy strategy) {
+	public void runSimulation(IStrategy strategy) {
 		long currentTimeMillis = System.currentTimeMillis();
 		CoinTypeEnum strategyCryptoCoinn = strategy.getCoinOfIntrest();
-		strategy.init(exchangeActionHandler, INITIAL_CASH_USD);
+		strategy.init(exchangeHandler);
 		for (int i = 0; i < NUM_OF_DAYS; i++) {
 
 			final long startTime = currentTimeMillis - (NUM_OF_DAYS - i) * DAY_IN_MS;
@@ -39,7 +37,7 @@ public class StrategySimulator {
 					strategyCryptoCoinn, startTime, currentTimeMillis - (NUM_OF_DAYS - i + 1) * DAY_IN_MS);
 			List<List<ICoinTransaction>> subSetDataForStrategyCallback = breakDownDailyData(fullDayTransactionsList,
 					strategy.getStrategySampleRateInSec(), startTime);
-			subSetDataForStrategyCallback.stream().forEach(strategy::analyzeData);
+			subSetDataForStrategyCallback.stream().forEach(dataList -> {exchangeHandler.feedData(dataList); strategy.analyzeData(dataList); });
 			// Sleep in order not to overload Binance API
 			FunctionalCodeUtils.methodRunner((RunnableThrows<InterruptedException>) () -> Thread.sleep(10000));
 

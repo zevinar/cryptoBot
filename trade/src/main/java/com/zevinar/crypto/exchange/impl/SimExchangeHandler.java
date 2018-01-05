@@ -93,13 +93,15 @@ public class SimExchangeHandler implements IExchangeHandler {
 			IOpenTransaction openTransaction = openTransactionsList.get(NumberUtils.INTEGER_ZERO);
 			if (openTransaction.getTransactionType() == TransactionTypeEnum.BUY
 					&& openTransaction.getCoinUsdPrice() >= iCoinTransaction.getTransactionPrice()) {
+				openTransactionsList.remove(openTransaction);
 				LOG.info("Transaction Performed {}", openTransaction);
-				double coinAmountBought = openTransaction.getTransactionAmount() / openTransaction.getCoinUsdPrice();
+				double coinAmountBought = (1 - getTransactionFee() ) * openTransaction.getTransactionAmount() / openTransaction.getCoinUsdPrice();
 				coinBalanceMap.put(openTransaction.getCoinType(), coinAmountBought);
 
 			} else if (openTransaction.getTransactionType() == TransactionTypeEnum.SELL
 					&& openTransaction.getCoinUsdPrice() <= iCoinTransaction.getTransactionPrice()) {
-				currentCashUSD += openTransaction.getCoinUsdPrice() * openTransaction.getTransactionAmount();
+				currentCashUSD +=  (1 - getTransactionFee() ) * openTransaction.getCoinUsdPrice() * openTransaction.getTransactionAmount();
+				openTransactionsList.remove(openTransaction);
 				LOG.info("Transaction Performed {} Current Cache is: {}", openTransaction, currentCashUSD);
 			}
 		}

@@ -21,6 +21,7 @@ public class StrategySimulator {
 	public static final int DAY_IN_MS = 24 * 60 * 60 * 1000;
 	// Sim Params
 	private int numOfDays = 30;
+	private int sleepDuration = 10000;
 
 	public void runSimulation(IStrategy strategy, SimExchangeHandler simExchangeHandler) {
 		long currentTimeMillis = System.currentTimeMillis();
@@ -33,7 +34,7 @@ public class StrategySimulator {
 					strategy.getStrategySampleRateInSec(), startTime);
 			subSetDataForStrategyCallback.stream().forEach(dataList -> {simExchangeHandler.feedData(dataList); strategy.analyzeData(dataList); });
 			// Sleep in order not to overload Binance API
-			FunctionalCodeUtils.methodRunner((RunnableThrows<InterruptedException>) () -> Thread.sleep(10000));
+			FunctionalCodeUtils.methodRunner((RunnableThrows<InterruptedException>) () -> Thread.sleep(sleepDuration));
 
 		}
 
@@ -59,5 +60,9 @@ public class StrategySimulator {
 
 	public void setNumOfDays(int numOfDays) {
 		this.numOfDays = numOfDays;
+	}
+
+	public void setSleepDuration(int sleepDuration) {
+		this.sleepDuration = sleepDuration;
 	}
 }

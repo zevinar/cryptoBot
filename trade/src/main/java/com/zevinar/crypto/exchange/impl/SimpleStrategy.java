@@ -20,8 +20,8 @@ import com.zevinar.crypto.utils.enums.TransactionTypeEnum;
 public class SimpleStrategy implements IStrategy {
 	private static final Logger LOG = LoggerFactory.getLogger(SimpleStrategy.class);
 	private IExchangeHandler exchangeHandler;
-	private static final double BID_DISCOUNT = 0.2;
-	private static final double SELL_PROFIT = 0.2;
+	private double bidDiscount = 0.16;
+	private double sellProfit = 0.2;
 	@Override
 	public int getStrategySampleRateInSec() {
 		return 60;
@@ -31,13 +31,13 @@ public class SimpleStrategy implements IStrategy {
 	public CoinTypeEnum getCoinOfIntrest() {
 		return CoinTypeEnum.LTC;
 	}
-
+	double wantedBuyPrice = 0, actualBuyPrice = 0, wantedSellPrice = 0, actualSellPrice = 0;
 	@Override
-	public boolean analyzeData(List<ICoinTransaction> data) {
-		double wantedBuyPrice = 0, actualBuyPrice = 0, wantedSellPrice = 0, actualSellPrice = 0;
+	public boolean analyzeData(List<ICoinTransaction> dataList) {
+		
 		boolean continueAnalysis = true;
-		if (!isEmpty(data)) {
-			CoinTypeEnum coinType = data.get(NumberUtils.INTEGER_ZERO).getTransactionCoinType();
+		if (!isEmpty(dataList)) {
+			CoinTypeEnum coinType = dataList.get(NumberUtils.INTEGER_ZERO).getTransactionCoinType();
 			List<IOpenTransaction> openTransactions = exchangeHandler.getOpenTransactions();
 			boolean hasOpenTransactions = !isEmpty(openTransactions);
 			boolean hasCoinsForTrade = exchangeHandler.getCoinBalance(coinType) >= coinType.getMinCoinForTrade();
@@ -52,26 +52,21 @@ public class SimpleStrategy implements IStrategy {
 				handleOpenTransactions(openTransactions);
 			} else if (hasCoinsForTrade) {
 				actualBuyPrice = wantedBuyPrice;
-				LOG.info("Bought: {} At Price: {}", coinType.getCoinName(),
-						actualBuyPrice);
-				wantedSellPrice = (NumberUtils.DOUBLE_ONE - SELL_PROFIT) * actualBuyPrice;
-				LOG.info("Posting Sell: {} At Price: {}", coinType.getCoinName(),
-						wantedSellPrice);
-				exchangeHandler.postTransactionRequest(new OpenTransactionImpl(coinType, TransactionTypeEnum.SELL, wantedSellPrice, 100));
+			
+				wantedSellPrice = (NumberUtils.DOUBLE_ONE + sellProfit) * actualBuyPrice;
+				final OpenTransactionImpl sellRequest = new OpenTransactionImpl(coinType, TransactionTypeEnum.SELL, wantedSellPrice, exchangeHandler.getCoinBalance(coinType));
+				LOG.info("Strategy Posting Sell: {}", sellRequest);
+				exchangeHandler.postTransactionRequest(sellRequest);
 
 
 			} else if (hasCashForTrade) {
 				actualSellPrice = wantedSellPrice;
-				if(  actualSellPrice > 0 ) {
-					LOG.info("Sold: {} At Price: {}", coinType.getCoinName(),
-							actualSellPrice);
-				}
-				final ICoinTransaction iCoinTransaction = data.get(NumberUtils.INTEGER_ZERO);
+				final ICoinTransaction iCoinTransaction = dataList.get(NumberUtils.INTEGER_ZERO);
 				double lastCoinPrice = iCoinTransaction.getTransactionPrice();
-				wantedBuyPrice = (actualSellPrice > NumberUtils.DOUBLE_ZERO) ? (NumberUtils.DOUBLE_ONE - BID_DISCOUNT) * actualSellPrice: (NumberUtils.DOUBLE_ONE - BID_DISCOUNT) * lastCoinPrice;
-				LOG.info("Posting Buy: {} At Price: {}", coinType.getCoinName(),
-						wantedBuyPrice);
-				exchangeHandler.postTransactionRequest(new OpenTransactionImpl(coinType, TransactionTypeEnum.BUY, wantedBuyPrice, 100));
+				wantedBuyPrice = (actualSellPrice > NumberUtils.DOUBLE_ZERO) ? (NumberUtils.DOUBLE_ONE - bidDiscount) * actualSellPrice: (NumberUtils.DOUBLE_ONE - bidDiscount) * lastCoinPrice;
+				final OpenTransactionImpl buyRequest = new OpenTransactionImpl(coinType, TransactionTypeEnum.BUY, wantedBuyPrice, 100);
+				LOG.info("Strategy Posting Buy: {} ", buyRequest);
+				exchangeHandler.postTransactionRequest(buyRequest);
 
 			} else {
 				LOG.error("Illegal State at analyzeData method ");
@@ -100,6 +95,14 @@ public class SimpleStrategy implements IStrategy {
 	@Override
 	public void init(IExchangeHandler exchangeHandler) {
 		this.exchangeHandler = exchangeHandler;
+	}
+
+	public void setBidDiscount(double bidDiscount) {
+		this.bidDiscount = bidDiscount;
+	}
+
+	public void setSellProfit(double sellProfit) {
+		this.sellProfit = sellProfit;
 	}
 
 }

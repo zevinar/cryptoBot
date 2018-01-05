@@ -84,19 +84,16 @@ public class SimpleStrategy implements IStrategy {
 	private void handleOpenTransactions(List<IOpenTransaction> openTransactions) {
 		 
 		IOpenTransaction openTransaction = openTransactions.get(NumberUtils.INTEGER_ZERO);
-		if (openTransaction!=null) {
-			switch (openTransaction.getTransactionType()) {
-				case BUY:
-					break;
-				case SELL:
-					break;
-				default:
-					throw new NotImplementedException(String.format("Transaction Type Not Implemented For : %s",
-							openTransaction.getTransactionType()));
-			}
+		//TODO openTransaction might be null
+		switch (openTransaction.getTransactionType()) {
+		case BUY:
+			break;
+		case SELL:
+			break;
+		default:
+			throw new NotImplementedException(String.format("Transaction Type Not Implemented For : %s",
+					openTransaction.getTransactionType()));
 		}
-		throw new NotImplementedException(String.format("Transaction Type Not Implemented For : %s",
-				openTransaction.getTransactionType()));
 	}
 
 	@Override

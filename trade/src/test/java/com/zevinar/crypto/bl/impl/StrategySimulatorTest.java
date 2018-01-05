@@ -23,7 +23,7 @@ public class StrategySimulatorTest {
 	StrategySimulator simulator = new StrategySimulator();
 
 	@Test
-	public void testBreakDownDailyData() {
+	public void testBreakHourlyDailyData() {
 		int strategySampleRateInSec = 15;
 
 		// 27.12.2017 15:55
@@ -32,27 +32,27 @@ public class StrategySimulatorTest {
 		ICoinTransaction firstTransaction = buildTransaction(startTime + 2000);
 		ICoinTransaction secondTransaction = buildTransaction(startTime + 3000);
 		// Last Segment
-		ICoinTransaction thirdTransaction = buildTransaction(startTime + StrategySimulator.DAY_IN_MS);
-		List<ICoinTransaction> fullDayTransactionsList = Arrays.asList(firstTransaction, secondTransaction,
+		ICoinTransaction thirdTransaction = buildTransaction(startTime + StrategySimulator.HOUR_IN_MS);
+		List<ICoinTransaction> fullHourTransactionsList = Arrays.asList(firstTransaction, secondTransaction,
 				thirdTransaction);
 
-		List<List<ICoinTransaction>> breakDownDailyData = simulator.breakDownDailyData(fullDayTransactionsList,
+		List<List<ICoinTransaction>> breakDownHourlyData = simulator.breakDownHourlyData(fullHourTransactionsList,
 				strategySampleRateInSec, startTime);
-		final int hours = breakDownDailyData.size() * strategySampleRateInSec / 3600;
-		MatcherAssert.assertThat(hours, Matchers.is(24));
+		final int minutes = breakDownHourlyData.size() / (60 / strategySampleRateInSec);
+		MatcherAssert.assertThat(minutes, Matchers.is(60));
 		// First Segment
-		List<ICoinTransaction> firstSegment = breakDownDailyData.get(NumberUtils.INTEGER_ZERO);
+		List<ICoinTransaction> firstSegment = breakDownHourlyData.get(NumberUtils.INTEGER_ZERO);
 		MatcherAssert.assertThat(firstSegment.size(), Matchers.is(2));
 		MatcherAssert.assertThat(firstSegment, Matchers.contains(firstTransaction, secondTransaction));
 
 		// Second Segment
-		List<ICoinTransaction> lastSegment = breakDownDailyData
-				.get(breakDownDailyData.size() - NumberUtils.INTEGER_ONE);
+		List<ICoinTransaction> lastSegment = breakDownHourlyData
+				.get(breakDownHourlyData.size() - NumberUtils.INTEGER_ONE);
 		MatcherAssert.assertThat(lastSegment.size(), Matchers.is(NumberUtils.INTEGER_ONE));
 		MatcherAssert.assertThat(lastSegment, Matchers.contains(thirdTransaction));
 
 		// Whole List
-		List<ICoinTransaction> allElementsFlat = breakDownDailyData.stream().flatMap(e -> e.stream())
+		List<ICoinTransaction> allElementsFlat = breakDownHourlyData.stream().flatMap(e -> e.stream())
 				.collect(Collectors.toList());
 		MatcherAssert.assertThat(allElementsFlat.size(), Matchers.is(3));
 	}

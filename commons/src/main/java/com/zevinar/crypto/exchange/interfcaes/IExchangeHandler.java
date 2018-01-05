@@ -1,8 +1,10 @@
 package com.zevinar.crypto.exchange.interfcaes;
 
-import java.util.List;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.marketdata.Trade;
 
-import com.zevinar.crypto.utils.enums.CoinTypeEnum;
+import java.io.IOException;
+import java.util.List;
 
 public interface IExchangeHandler extends IBaseExchangeHandler {
 	/**
@@ -11,7 +13,7 @@ public interface IExchangeHandler extends IBaseExchangeHandler {
 	 * @param fromTime
 	 * @return
 	 */
-	List<ICoinTransaction> getSingleCoinTransactions(CoinTypeEnum coinType, long fromTime, long toTime);
+	List<Trade> getSingleCoinTransactions(CurrencyPair coinType, long fromTime, long toTime) throws IOException;
 
 	
 

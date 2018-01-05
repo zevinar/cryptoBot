@@ -1,21 +1,22 @@
 package com.zevinar.crypto.bl.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.marketdata.Trade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zevinar.crypto.exchange.impl.SimExchangeHandler;
 import com.zevinar.crypto.exchange.impl.SimpleStrategy;
-import com.zevinar.crypto.exchange.interfcaes.ICoinTransaction;
 import com.zevinar.crypto.exchange.interfcaes.IStrategy;
 import com.zevinar.crypto.utils.FunctionalCodeUtils;
 import com.zevinar.crypto.utils.FunctionalCodeUtils.RunnableThrows;
-import com.zevinar.crypto.utils.enums.CoinTypeEnum;
 
 public class StrategySimulator {
 	private static final Logger LOG = LoggerFactory.getLogger(StrategySimulator.class);
@@ -39,14 +40,20 @@ public class StrategySimulator {
 
 	public void runSimulation(IStrategy strategy, SimExchangeHandler simExchangeHandler) {
 		long currentTimeMillis = System.currentTimeMillis();
-		CoinTypeEnum strategyCryptoCoinn = strategy.getCoinOfIntrest();
+		CurrencyPair strategyCryptoCoinn = strategy.getCoinOfIntrest();
 		long numOfHours = numOfDays * 24;
 		for (int i = 0; i < numOfHours; i++) {
 			final long startTime = currentTimeMillis - (numOfHours - i) * HOUR_IN_MS;
 			final long endTime = currentTimeMillis - (numOfHours - i - 1) * HOUR_IN_MS ;
-			List<ICoinTransaction> fullDayTransactionsList = simExchangeHandler.getSingleCoinTransactions(
-					strategyCryptoCoinn, startTime, endTime);
-			List<List<ICoinTransaction>> subSetDataForStrategyCallback = breakDownHourlyData(fullDayTransactionsList,
+			List<Trade> fullDayTransactionsList = null;
+			try {
+				fullDayTransactionsList = simExchangeHandler.getSingleCoinTransactions(
+                        strategyCryptoCoinn, startTime, endTime);
+			} catch (IOException e) {
+				//TODO handle excpetion
+				e.printStackTrace();
+			}
+			List<List<Trade>> subSetDataForStrategyCallback = breakDownHourlyData(fullDayTransactionsList,
 					strategy.getStrategySampleRateInSec(), startTime);
 			subSetDataForStrategyCallback.stream().flatMap( List::stream).findFirst().ifPresent(trans -> LOG.debug("Current Quote is : {}", trans));
 			subSetDataForStrategyCallback.stream().forEach(dataList -> {
@@ -60,20 +67,20 @@ public class StrategySimulator {
 
 	}
 
-	List<List<ICoinTransaction>> breakDownHourlyData(List<ICoinTransaction> fullHourTransactionsList,
+	List<List<Trade>> breakDownHourlyData(List<Trade> fullHourTransactionsList,
 			int strategySampleRateInSec, long startTime) {
 
-		List<Predicate<ICoinTransaction>> predicateList = new ArrayList<>();
+		List<Predicate<Trade>> predicateList = new ArrayList<>();
 		for (long i = startTime; i <= HOUR_IN_MS + startTime; i = i + strategySampleRateInSec * 1000) {
 			long startTimeCurr = i;
 			long endTimeCurr = startTimeCurr + strategySampleRateInSec * 1000;
-			Predicate<ICoinTransaction> timeFilter = coinTrans -> coinTrans.getTransactionTime() >= startTimeCurr
-					&& coinTrans.getTransactionTime() < endTimeCurr;
+			Predicate<Trade> timeFilter = coinTrans -> coinTrans.getTimestamp().getTime() >= startTimeCurr
+					&& coinTrans.getTimestamp().getTime() < endTimeCurr;
 			predicateList.add(timeFilter);
 
 		}
 		// Each Element Represent Data Segment during strategySampleRateInSec
-		final Stream<List<ICoinTransaction>> streamByStrategySample = predicateList.stream().map(
+		final Stream<List<Trade>> streamByStrategySample = predicateList.stream().map(
 				currPredicate -> fullHourTransactionsList.stream().filter(currPredicate).collect(Collectors.toList()));
 		return streamByStrategySample.collect(Collectors.toList());
 	}

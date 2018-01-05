@@ -1,9 +1,10 @@
 package com.zevinar.crypto.exchange.interfcaes;
 
-import com.zevinar.crypto.utils.enums.CoinTypeEnum;
+import org.knowm.xchange.currency.Currency;
+import org.knowm.xchange.currency.CurrencyPair;
 
 public interface ICoinQuote {
-	CoinTypeEnum getCoinType();
+	CurrencyPair getCoinType();
 	Double getUSDollarBuy();
 	Double getUSDollarSell();
 }

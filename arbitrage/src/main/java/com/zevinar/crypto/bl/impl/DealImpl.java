@@ -67,11 +67,11 @@ public class DealImpl implements IDeal {
 				+ "Buy:  %s at %s for price of %s US$ \n" + "Sell: %s at %s for price of %s US$ \n\n"
 				+ "Expected Profit After Commissions is: %s";
 		return String.format(template, 
-				buyFirstExchange.getCoinType().getCoinName(), firstExchange.getExchangeDetails().getExchangeName(), buyFirstExchange.getUSDollarBuy(),
-				sellSecondExchange.getCoinType().getCoinName(), secondExchange.getExchangeDetails().getExchangeName(),
-				sellSecondExchange.getUSDollarSell(), buySecondExchange.getCoinType().getCoinName(),
+				buyFirstExchange.getCoinType().base.getDisplayName(), firstExchange.getExchangeDetails().getExchangeName(), buyFirstExchange.getUSDollarBuy(),
+				sellSecondExchange.getCoinType().base.getDisplayName(), secondExchange.getExchangeDetails().getExchangeName(),
+				sellSecondExchange.getUSDollarSell(), buySecondExchange.getCoinType().base.getDisplayName(),
 				secondExchange.getExchangeDetails().getExchangeName(), buySecondExchange.getUSDollarBuy(),
-				sellFirstExchange.getCoinType().getCoinName(), firstExchange.getExchangeDetails().getExchangeName(),
+				sellFirstExchange.getCoinType().base.getDisplayName(), firstExchange.getExchangeDetails().getExchangeName(),
 				sellFirstExchange.getUSDollarSell(), profit);
 	}
 }

@@ -1,4 +1,4 @@
-package com.zevinar.crypto.exchange.interfcaes;
+package com.zevinar.crypto.exchange.dto;
 
 /**
  * Represents transaction buy/sell result returned from an exchange

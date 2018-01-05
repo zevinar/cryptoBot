@@ -3,26 +3,27 @@ package com.zevinar.crypto.bl;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.knowm.xchange.currency.CurrencyPair;
 import org.mockito.Mockito;
 
 import com.zevinar.crypto.bl.interfcaes.IDeal;
 import com.zevinar.crypto.exchange.interfcaes.ICoinQuote;
 import com.zevinar.crypto.exchange.interfcaes.IExchangeHandlerForArbitrage;
-import com.zevinar.crypto.utils.enums.CoinTypeEnum;
 import com.zevinar.crypto.utils.enums.ExchangeDetailsEnum;
 
 public class CryptoBusinessLogicTest {
 
 	@Test
 	public void testCalculateDealNoCommissions() {
-		ICoinQuote buyFirstExchange = buildMockQuote(250, CoinTypeEnum.LTC);
-		ICoinQuote sellSecondExchange = buildMockQuote(300, CoinTypeEnum.LTC);
-		ICoinQuote buySecondExchange = buildMockQuote(10000, CoinTypeEnum.BTC);
-		ICoinQuote sellFirstExchange = buildMockQuote(9800, CoinTypeEnum.BTC);
+		ICoinQuote buyFirstExchange = buildMockQuote(250, new  CurrencyPair("LTC","USDT"));
+		ICoinQuote sellSecondExchange = buildMockQuote(300, new  CurrencyPair("LTC","USDT"));
+		ICoinQuote buySecondExchange = buildMockQuote(10000, CurrencyPair.BTC_USDT);
+		ICoinQuote sellFirstExchange = buildMockQuote(9800, CurrencyPair.BTC_USDT);
 		IExchangeHandlerForArbitrage handler = buildMockHandler(0, 0);
 		IDeal deal = ArbitrageBusinessLogic.calculateDeal(buyFirstExchange, sellSecondExchange, buySecondExchange,
 				sellFirstExchange, handler, handler);
@@ -32,10 +33,10 @@ public class CryptoBusinessLogicTest {
 
 	@Test
 	public void testCalculateDealWithCommissions() {
-		ICoinQuote buyFirstExchange = buildMockQuote(250, 249, CoinTypeEnum.LTC);
-		ICoinQuote sellSecondExchange = buildMockQuote(301, 300, CoinTypeEnum.LTC);
-		ICoinQuote buySecondExchange = buildMockQuote(10000, 9995, CoinTypeEnum.BTC);
-		ICoinQuote sellFirstExchange = buildMockQuote(9850, 9800, CoinTypeEnum.BTC);
+		ICoinQuote buyFirstExchange = buildMockQuote(250, 249, new  CurrencyPair("LTC","USDT"));
+		ICoinQuote sellSecondExchange = buildMockQuote(301, 300, new  CurrencyPair("LTC","USDT"));
+		ICoinQuote buySecondExchange = buildMockQuote(10000, 9995, CurrencyPair.BTC_USDT);
+		ICoinQuote sellFirstExchange = buildMockQuote(9850, 9800, CurrencyPair.BTC_USDT);
 
 		IDeal deal = ArbitrageBusinessLogic.calculateDeal(buyFirstExchange, sellSecondExchange, buySecondExchange,
 				sellFirstExchange, buildMockHandler(0.02, 0.01), buildMockHandler(0.04, 0.02));
@@ -48,17 +49,17 @@ public class CryptoBusinessLogicTest {
 
 	@Test
 	public void testCalculateBestArbitrage() {
-		ICoinQuote ltcFirstExchange = buildMockQuote(350, 346, CoinTypeEnum.LTC);
-		ICoinQuote btcFirstExchange = buildMockQuote(17000, 16900, CoinTypeEnum.BTC);
-		ICoinQuote ethFirstExchange = buildMockQuote(850, 833, CoinTypeEnum.ETH);
+		ICoinQuote ltcFirstExchange = buildMockQuote(350, 346, new  CurrencyPair("LTC","USDT"));
+		ICoinQuote btcFirstExchange = buildMockQuote(17000, 16900, CurrencyPair.BTC_USDT);
+		ICoinQuote ethFirstExchange = buildMockQuote(850, 833, new  CurrencyPair("ETH","USDT"));
 		IExchangeHandlerForArbitrage binanceExchange = buildMockHandler(0.02, 0.01, ExchangeDetailsEnum.BNC,
 				Arrays.asList(ltcFirstExchange, btcFirstExchange, ethFirstExchange));
 		
 		
-		ICoinQuote ltcSecondExchange = buildMockQuote(270, 264, CoinTypeEnum.LTC);
-		ICoinQuote btcSecondExchange = buildMockQuote(15000, 14800, CoinTypeEnum.BTC);
-		ICoinQuote ethSecondExchange = buildMockQuote(700, 687, CoinTypeEnum.ETH);
-		ICoinQuote dashSecondExchange = buildMockQuote(900, 897, CoinTypeEnum.DSH);
+		ICoinQuote ltcSecondExchange = buildMockQuote(270, 264, new  CurrencyPair("LTC","USDT"));
+		ICoinQuote btcSecondExchange = buildMockQuote(15000, 14800,CurrencyPair.BTC_USDT);
+		ICoinQuote ethSecondExchange = buildMockQuote(700, 687, new  CurrencyPair("ETH","USDT"));
+		ICoinQuote dashSecondExchange = buildMockQuote(900, 897, new  CurrencyPair("DASH","USDT"));
 		IExchangeHandlerForArbitrage wexExchange = buildMockHandler(0.02, 0.01, ExchangeDetailsEnum.WEX,
 				Arrays.asList(ltcSecondExchange, btcSecondExchange, ethSecondExchange, dashSecondExchange));
 		
@@ -82,11 +83,11 @@ public class CryptoBusinessLogicTest {
 		return handler;
 	}
 
-	private ICoinQuote buildMockQuote(double dollarQuote, CoinTypeEnum type) {
+	private ICoinQuote buildMockQuote(double dollarQuote, CurrencyPair type) {
 		return buildMockQuote(dollarQuote, dollarQuote, type);
 	}
 
-	private ICoinQuote buildMockQuote(double dollarQuoteBuy, double dollarQuoteSell, CoinTypeEnum type) {
+	private ICoinQuote buildMockQuote(double dollarQuoteBuy, double dollarQuoteSell, CurrencyPair type) {
 		ICoinQuote quote = Mockito.mock(ICoinQuote.class);
 		Mockito.when(quote.getCoinType()).thenReturn(type);
 		Mockito.when(quote.getUSDollarBuy()).thenReturn(dollarQuoteBuy);

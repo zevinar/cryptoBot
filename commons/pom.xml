@@ -10,10 +10,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <xchange.version>4.3.2</xchange.version>
     </properties>
-
-
     <artifactId>commons</artifactId>
+    <packaging>jar</packaging>
+    <name>commons</name>
+
+
     <dependencies>
+
 
 
         <dependency>
@@ -237,6 +240,9 @@
             <artifactId>xchange-vircurex</artifactId>
             <version>${xchange.version}</version>
         </dependency>
+
+
+
 
 
     </dependencies>

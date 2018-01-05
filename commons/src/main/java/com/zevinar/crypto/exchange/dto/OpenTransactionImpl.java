@@ -1,23 +1,23 @@
-package com.zevinar.crypto.exchange.impl;
+package com.zevinar.crypto.exchange.dto;
 
-import com.zevinar.crypto.exchange.interfcaes.IOpenTransaction;
-import com.zevinar.crypto.utils.enums.CoinTypeEnum;
 import com.zevinar.crypto.utils.enums.TransactionTypeEnum;
+import org.knowm.xchange.currency.Currency;
 
+//TODO change to Xchange data type
 public class OpenTransactionImpl implements IOpenTransaction{
-	private CoinTypeEnum coinType;
+	private Currency coinType;
 	private TransactionTypeEnum transactionType;
 	private double price;
 	private double amount;
 
-	public OpenTransactionImpl(CoinTypeEnum coinType, TransactionTypeEnum transactionType, double price, double amount){
+	public OpenTransactionImpl(Currency coinType, TransactionTypeEnum transactionType, double price, double amount){
 		this.coinType = coinType;
 		this.transactionType = transactionType;
 		this.price = price;
 		this.amount = amount;
 	}
 	@Override
-	public CoinTypeEnum getCoinType() {
+	public Currency getCoinType() {
 		return coinType;
 	}
 

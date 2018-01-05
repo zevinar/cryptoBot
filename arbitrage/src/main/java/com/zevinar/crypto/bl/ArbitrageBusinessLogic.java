@@ -11,8 +11,9 @@ import com.zevinar.crypto.bl.impl.DealImpl;
 import com.zevinar.crypto.bl.interfcaes.IDeal;
 import com.zevinar.crypto.exchange.interfcaes.ICoinQuote;
 import com.zevinar.crypto.exchange.interfcaes.IExchangeHandlerForArbitrage;
-import com.zevinar.crypto.utils.enums.CoinTypeEnum;
- 
+import org.knowm.xchange.currency.CurrencyPair;
+
+
 public final class ArbitrageBusinessLogic {
 
 	private ArbitrageBusinessLogic(){
@@ -28,9 +29,9 @@ public final class ArbitrageBusinessLogic {
 		List<ICoinQuote> quotesFirst = firstExchange.getAllCoinsQuotes();
 		List<ICoinQuote> quotesSecond = secondExchange.getAllCoinsQuotes();
 		
-		Map<CoinTypeEnum, ICoinQuote> firstQuoteMap = quotesFirst.stream()
+		Map<CurrencyPair, ICoinQuote> firstQuoteMap = quotesFirst.stream()
 				.collect(Collectors.toMap(ICoinQuote::getCoinType, Function.identity()));
-		Map<CoinTypeEnum, ICoinQuote> secondQuoteMap = quotesSecond.stream()
+		Map<CurrencyPair, ICoinQuote> secondQuoteMap = quotesSecond.stream()
 				.collect(Collectors.toMap(ICoinQuote::getCoinType, Function.identity()));
 		
 		Comparator<ICoinQuote> coinTypeComparator = (q1, q2) -> q1.getCoinType().compareTo(q2.getCoinType());

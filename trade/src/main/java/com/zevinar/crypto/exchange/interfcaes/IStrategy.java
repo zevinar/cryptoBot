@@ -2,12 +2,12 @@ package com.zevinar.crypto.exchange.interfcaes;
 
 import java.util.List;
 
-import com.zevinar.crypto.exchange.interfcaes.ICoinTransaction;
-import com.zevinar.crypto.utils.enums.CoinTypeEnum;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.marketdata.Trade;
 
 public interface IStrategy {
 	int getStrategySampleRateInSec();
-	CoinTypeEnum getCoinOfIntrest();
-	boolean analyzeData(List<ICoinTransaction> data);
+	CurrencyPair getCoinOfIntrest();
+	boolean analyzeData(List<Trade> data);
 	void init(IExchangeHandler exchangeHandler);
 }

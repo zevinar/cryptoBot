@@ -1,7 +1,7 @@
-package com.zevinar.crypto.exchange.interfcaes;
+package com.zevinar.crypto.exchange.dto;
 
-import com.zevinar.crypto.utils.enums.CoinTypeEnum;
 import com.zevinar.crypto.utils.enums.TransactionTypeEnum;
+import org.knowm.xchange.currency.Currency;
 
 /**
  * Represents an open Transaction in an Exchange.<br>
@@ -9,7 +9,7 @@ import com.zevinar.crypto.utils.enums.TransactionTypeEnum;
  *
  */
 public interface IOpenTransaction{
-	CoinTypeEnum getCoinType();
+	Currency getCoinType();
 	TransactionTypeEnum getTransactionType();
 	double getCoinUsdPrice();
 	double getTransactionAmount();

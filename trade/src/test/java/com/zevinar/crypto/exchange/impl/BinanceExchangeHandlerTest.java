@@ -5,13 +5,13 @@ import static com.zevinar.crypto.bl.impl.StrategySimulator.HOUR_IN_MS;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Test;
 
-import com.zevinar.crypto.bl.impl.BinanceTradeExchangeHandler;
-import com.zevinar.crypto.exchange.interfcaes.ICoinTransaction;
-import com.zevinar.crypto.utils.enums.CoinTypeEnum;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.marketdata.Trade;
 
 public class BinanceExchangeHandlerTest {
 	@Test
@@ -24,7 +24,13 @@ public class BinanceExchangeHandlerTest {
 		long fromTime = currentTimeMillis - (daysBack * DAY_IN_MS + 2 * HOUR_IN_MS );
 		long toTime = currentTimeMillis - (daysBack * DAY_IN_MS + HOUR_IN_MS);
 		// Last Hour
-		List<ICoinTransaction> singleCoinQuotes = handler.getSingleCoinTransactions(CoinTypeEnum.LTC, fromTime, toTime);
+		List<Trade> singleCoinQuotes = null;
+		try {
+			singleCoinQuotes = handler.getSingleCoinTransactions(new  CurrencyPair("LTC","USDT"), fromTime, toTime);
+		} catch (IOException e) {
+			//TODO handle
+			e.printStackTrace();
+		}
 		assertThat(singleCoinQuotes.size() > 0, is(true));
 
 	}

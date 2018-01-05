@@ -2,21 +2,22 @@ package com.zevinar.crypto.exchange.impl;
 
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.zevinar.crypto.exchange.interfcaes.IExchangeHandler;
 import org.apache.commons.collections4.map.HashedMap;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.knowm.xchange.currency.Currency;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.marketdata.Trade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zevinar.crypto.bl.impl.BinanceTradeExchangeHandler;
-import com.zevinar.crypto.exchange.interfcaes.ICoinTransaction;
-import com.zevinar.crypto.exchange.interfcaes.IExchangeHandler;
-import com.zevinar.crypto.exchange.interfcaes.IOpenTransaction;
-import com.zevinar.crypto.exchange.interfcaes.ITransactionResult;
-import com.zevinar.crypto.utils.enums.CoinTypeEnum;
+import com.zevinar.crypto.exchange.dto.IOpenTransaction;
+import com.zevinar.crypto.exchange.dto.ITransactionResult;
 import com.zevinar.crypto.utils.enums.ExchangeDetailsEnum;
 import com.zevinar.crypto.utils.enums.TransactionTypeEnum;
 
@@ -26,7 +27,7 @@ public class SimExchangeHandler implements IExchangeHandler {
 	ITransactionResult fakeResult = new ITransactionResult() {
 	};
 	List<IOpenTransaction> openTransactionsList = new ArrayList<>();
-	Map<CoinTypeEnum, Double> coinBalanceMap = new HashedMap<>();
+	Map<Currency, Double> coinBalanceMap = new HashedMap<>();
 	private double currentCashUSD = 100;
 
 	@Override
@@ -41,7 +42,7 @@ public class SimExchangeHandler implements IExchangeHandler {
 
 	@Override
 	public ITransactionResult postTransactionRequest(IOpenTransaction request) {
-		CoinTypeEnum coinType = request.getCoinType();
+		Currency coinType = request.getCoinType();
 
 		if (request.getTransactionType() == TransactionTypeEnum.BUY) {
 
@@ -52,11 +53,11 @@ public class SimExchangeHandler implements IExchangeHandler {
 				openTransactionsList.add(request);
 			}
 		} else {
-			if (request.getTransactionAmount() > coinBalanceMap.get(coinType)) {
-				LOG.error("Illegal Transaction Current Coin Amount {}, Transaction: {}", coinBalanceMap.get(coinType),
+			if (request.getTransactionAmount() > getCoinBalance(coinType)) {
+				LOG.error("Illegal Transaction Current Coin Amount {}, Transaction: {}", getCoinBalance(coinType),
 						request);
 			} else {
-				coinBalanceMap.put(coinType, coinBalanceMap.get(coinType) - request.getTransactionAmount());
+				coinBalanceMap.put(coinType,getCoinBalance(coinType) - request.getTransactionAmount());
 				openTransactionsList.add(request);
 			}
 		}
@@ -69,7 +70,7 @@ public class SimExchangeHandler implements IExchangeHandler {
 	}
 
 	@Override
-	public double getCoinBalance(CoinTypeEnum coinType) {
+	public double getCoinBalance(Currency coinType) {
 		double balance = NumberUtils.DOUBLE_ZERO;
 		if (coinBalanceMap.containsKey(coinType)) {
 			balance = coinBalanceMap.get(coinType);
@@ -83,23 +84,23 @@ public class SimExchangeHandler implements IExchangeHandler {
 	}
 
 	@Override
-	public List<ICoinTransaction> getSingleCoinTransactions(CoinTypeEnum coinType, long fromTime, long toTime) {
+	public List<Trade> getSingleCoinTransactions(CurrencyPair coinType, long fromTime, long toTime) throws IOException {
 		return BinanceTradeExchangeHandler.getSingleCoinTransactionsWithCache(coinType, fromTime, toTime);
 	}
 
-	public void feedData(List<ICoinTransaction> dataList) {
+	public void feedData(List<Trade> dataList) {
 		if (!isEmpty(dataList) && !isEmpty(openTransactionsList)) {
-			ICoinTransaction iCoinTransaction = dataList.get(NumberUtils.INTEGER_ZERO);
+			Trade Trade = dataList.get(NumberUtils.INTEGER_ZERO);
 			IOpenTransaction openTransaction = openTransactionsList.get(NumberUtils.INTEGER_ZERO);
 			if (openTransaction.getTransactionType() == TransactionTypeEnum.BUY
-					&& openTransaction.getCoinUsdPrice() >= iCoinTransaction.getTransactionPrice()) {
+					&& openTransaction.getCoinUsdPrice() >= Trade.getPrice().doubleValue()) {
 				openTransactionsList.remove(openTransaction);
 				LOG.info("Transaction Performed {}", openTransaction);
 				double coinAmountBought = (1 - getTransactionFee() ) * openTransaction.getTransactionAmount() / openTransaction.getCoinUsdPrice();
 				coinBalanceMap.put(openTransaction.getCoinType(), coinAmountBought);
 
 			} else if (openTransaction.getTransactionType() == TransactionTypeEnum.SELL
-					&& openTransaction.getCoinUsdPrice() <= iCoinTransaction.getTransactionPrice()) {
+					&& openTransaction.getCoinUsdPrice() <= Trade.getPrice().doubleValue()) {
 				currentCashUSD +=  (1 - getTransactionFee() ) * openTransaction.getCoinUsdPrice() * openTransaction.getTransactionAmount();
 				openTransactionsList.remove(openTransaction);
 				LOG.info("Transaction Performed {} Current Cache is: {}", openTransaction, currentCashUSD);

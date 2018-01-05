@@ -2,8 +2,10 @@ package com.zevinar.crypto.exchange.interfcaes;
 
 import java.util.List;
 
-import com.zevinar.crypto.utils.enums.CoinTypeEnum;
+import com.zevinar.crypto.exchange.dto.IOpenTransaction;
+import com.zevinar.crypto.exchange.dto.ITransactionResult;
 import com.zevinar.crypto.utils.enums.ExchangeDetailsEnum;
+import org.knowm.xchange.currency.Currency;
 
 public interface IBaseExchangeHandler {
 	
@@ -20,7 +22,7 @@ public interface IBaseExchangeHandler {
 	
 	List<IOpenTransaction> getOpenTransactions();
 
-	double getCoinBalance(CoinTypeEnum coinType);
+	double getCoinBalance(Currency coinType);
 	
 	double getCurrentCashUSD();
 

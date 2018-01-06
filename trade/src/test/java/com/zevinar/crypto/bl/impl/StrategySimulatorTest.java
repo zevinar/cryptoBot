@@ -22,6 +22,7 @@ import org.mockito.Mockito;
 
 import com.zevinar.crypto.exchange.impl.SimExchangeHandler;
 import com.zevinar.crypto.exchange.impl.SimpleStrategy;
+import com.zevinar.crypto.utils.DateUtils;
 
 public class StrategySimulatorTest {
 	StrategySimulator simulator = new StrategySimulator();
@@ -36,7 +37,7 @@ public class StrategySimulatorTest {
 		Trade firstTransaction = buildTransaction(startTime + 2000);
 		Trade secondTransaction = buildTransaction(startTime + 3000);
 		// Last Segment
-		Trade thirdTransaction = buildTransaction(startTime + StrategySimulator.HOUR_IN_MS);
+		Trade thirdTransaction = buildTransaction(startTime + DateUtils.HOUR_IN_MS);
 		List<Trade> fullHourTransactionsList = Arrays.asList(firstTransaction, secondTransaction, thirdTransaction);
 
 		List<List<Trade>> breakDownHourlyData = simulator.breakDownHourlyData(fullHourTransactionsList,
@@ -81,7 +82,7 @@ public class StrategySimulatorTest {
 	private List<Trade> buildTransactionList() {
 		long minInMS = 60 * 1000;
 		long hourInMs = 60 * minInMS;
-		final long startTime = System.currentTimeMillis() - StrategySimulator.DAY_IN_MS;
+		final long startTime = System.currentTimeMillis() - DateUtils.DAY_IN_MS;
 		List<Trade> list = new ArrayList<>();
 		list.add(buildTransaction(startTime + 2000, 250, new CurrencyPair("LTC", "USDT")));
 		list.add(buildTransaction(startTime + 2 * minInMS, 248, new CurrencyPair("LTC", "USDT")));

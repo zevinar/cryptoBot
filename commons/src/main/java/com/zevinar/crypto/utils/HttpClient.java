@@ -11,11 +11,11 @@ import org.apache.http.util.EntityUtils;
 
 public enum HttpClient {
 	CLIENT;
-	private CloseableHttpClient httpclient = HttpClients.createDefault();
+	private CloseableHttpClient client = HttpClients.createDefault();
 
 	public HttpResponse doGet(String url) {
 		HttpResponse response;
-		try (CloseableHttpResponse closeableResponse = httpclient.execute( new HttpGet(url))) {
+		try (CloseableHttpResponse closeableResponse = client.execute( new HttpGet(url))) {
 			int statusCode = closeableResponse.getStatusLine().getStatusCode();
 			HttpEntity entity1 = closeableResponse.getEntity();
 			String body = EntityUtils.toString(entity1, "UTF-8");

@@ -14,14 +14,12 @@ import org.slf4j.LoggerFactory;
 import com.zevinar.crypto.exchange.impl.SimExchangeHandler;
 import com.zevinar.crypto.exchange.impl.SimpleStrategy;
 import com.zevinar.crypto.exchange.interfcaes.IStrategy;
+import com.zevinar.crypto.utils.DateUtils;
 import com.zevinar.crypto.utils.FunctionalCodeUtils;
 import com.zevinar.crypto.utils.FunctionalCodeUtils.RunnableThrows;
 
 public class StrategySimulator {
 	private static final Logger LOG = LoggerFactory.getLogger(StrategySimulator.class);
-	public static final int MIN_IN_MS = 60 * 1000;
-	public static final int HOUR_IN_MS = 60 * MIN_IN_MS;
-	public static final int DAY_IN_MS = 24 * HOUR_IN_MS;
 	// Sim Params
 	private int numOfDays = 23;
 	private int sleepDuration = 3000;
@@ -37,12 +35,12 @@ public class StrategySimulator {
 	}
 
 	public void runSimulation(IStrategy strategy, SimExchangeHandler simExchangeHandler) {
-		long currentTimeMillis = System.currentTimeMillis();
+		long currentTimeMillis = DateUtils.roundToClosetHour(System.currentTimeMillis());
 		CurrencyPair strategyCryptoCoinn = strategy.getCoinOfIntrest();
-		long numOfHours = numOfDays * 24;
+		long numOfHours = numOfDays * 24L;
 		for (int i = 0; i < numOfHours; i++) {
-			final long startTime = currentTimeMillis - (numOfHours - i) * HOUR_IN_MS;
-			final long endTime = currentTimeMillis - (numOfHours - i - 1) * HOUR_IN_MS;
+			final long startTime = currentTimeMillis - (numOfHours - i) * DateUtils.HOUR_IN_MS;
+			final long endTime = currentTimeMillis - (numOfHours - i - 1) * DateUtils.HOUR_IN_MS;
 			List<Trade> fullHourTransactionsList = null;
 			fullHourTransactionsList = simExchangeHandler.getTradesWithCache(strategyCryptoCoinn, null, startTime,
 					endTime, null);
@@ -65,7 +63,7 @@ public class StrategySimulator {
 			long startTime) {
 
 		List<Predicate<Trade>> predicateList = new ArrayList<>();
-		for (long i = startTime; i <= HOUR_IN_MS + startTime; i = i + strategySampleRateInSec * 1000) {
+		for (long i = startTime; i <= DateUtils.HOUR_IN_MS + startTime; i = i + strategySampleRateInSec * 1000) {
 			long startTimeCurr = i;
 			long endTimeCurr = startTimeCurr + strategySampleRateInSec * 1000;
 			Predicate<Trade> timeFilter = coinTrans -> coinTrans.getTimestamp().getTime() >= startTimeCurr

@@ -33,7 +33,7 @@ public class SimpleStrategy implements IStrategy {
 
 	@Override
 	public CurrencyPair getCoinOfIntrest() {
-		return new CurrencyPair("LTC","USD");
+		return new CurrencyPair("LTC","USDT");
 	}
 	double wantedBuyPrice = 0, actualBuyPrice = 0, wantedSellPrice = 0, actualSellPrice = 0;
 	@Override

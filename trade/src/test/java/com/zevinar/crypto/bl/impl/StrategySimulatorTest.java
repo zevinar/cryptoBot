@@ -2,8 +2,8 @@ package com.zevinar.crypto.bl.impl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.doReturn;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,8 +37,7 @@ public class StrategySimulatorTest {
 		Trade secondTransaction = buildTransaction(startTime + 3000);
 		// Last Segment
 		Trade thirdTransaction = buildTransaction(startTime + StrategySimulator.HOUR_IN_MS);
-		List<Trade> fullHourTransactionsList = Arrays.asList(firstTransaction, secondTransaction,
-				thirdTransaction);
+		List<Trade> fullHourTransactionsList = Arrays.asList(firstTransaction, secondTransaction, thirdTransaction);
 
 		List<List<Trade>> breakDownHourlyData = simulator.breakDownHourlyData(fullHourTransactionsList,
 				strategySampleRateInSec, startTime);
@@ -50,8 +49,7 @@ public class StrategySimulatorTest {
 		MatcherAssert.assertThat(firstSegment, Matchers.contains(firstTransaction, secondTransaction));
 
 		// Second Segment
-		List<Trade> lastSegment = breakDownHourlyData
-				.get(breakDownHourlyData.size() - NumberUtils.INTEGER_ONE);
+		List<Trade> lastSegment = breakDownHourlyData.get(breakDownHourlyData.size() - NumberUtils.INTEGER_ONE);
 		MatcherAssert.assertThat(lastSegment.size(), Matchers.is(NumberUtils.INTEGER_ONE));
 		MatcherAssert.assertThat(lastSegment, Matchers.contains(thirdTransaction));
 
@@ -70,15 +68,12 @@ public class StrategySimulatorTest {
 		strategy.setBidDiscount(0.2);
 		strategy.setSellProfit(0.2);
 		strategy.init(exchangeHandler);
-		try {
-			Mockito.doReturn(buildTransactionList()).when(exchangeHandler)
-                    .getTradesWithCache(Mockito.any(CurrencyPair.class),Mockito.isNull(), Mockito.anyLong(), Mockito.anyLong(),Mockito.isNull());
-		} catch (IOException e) {
-			//TODO crypto handle
-			e.printStackTrace();
-		}
+
+		doReturn(buildTransactionList()).when(exchangeHandler).
+				getTradesWithCache(Mockito.any(CurrencyPair.class), Mockito.isNull(),
+						Mockito.anyLong(), Mockito.anyLong(), Mockito.isNull());
 		simulator.runSimulation(strategy, exchangeHandler);
-		assertThat(((int) (exchangeHandler.getCoinBalance(Currency.USD) * 100))/100.0 , is(15.24));
+		assertThat(((int) (exchangeHandler.getCoinBalance(Currency.USD) * 100)) / 100.0, is(15.24));
 		assertThat(exchangeHandler.getOpenTransactions().size(), is(1));
 
 	}
@@ -88,19 +83,19 @@ public class StrategySimulatorTest {
 		long hourInMs = 60 * minInMS;
 		final long startTime = System.currentTimeMillis() - StrategySimulator.DAY_IN_MS;
 		List<Trade> list = new ArrayList<>();
-		list.add(buildTransaction(startTime + 2000, 250, new  CurrencyPair("LTC","USDT")));
-		list.add(buildTransaction(startTime + 2 * minInMS, 248, new  CurrencyPair("LTC","USDT")));
-		list.add(buildTransaction(startTime + 4 * minInMS, 221, new  CurrencyPair("LTC","USDT")));
-		list.add(buildTransaction(startTime + 6 * minInMS, 199, new  CurrencyPair("LTC","USDT")));
-		list.add(buildTransaction(startTime + hourInMs + 2 * minInMS, 180, new  CurrencyPair("LTC","USDT")));
-		list.add(buildTransaction(startTime + hourInMs + 4 * minInMS, 189, new  CurrencyPair("LTC","USDT")));
-		list.add(buildTransaction(startTime + hourInMs + 6 * minInMS, 200, new  CurrencyPair("LTC","USDT")));
-		list.add(buildTransaction(startTime + 2 * hourInMs, 239, new  CurrencyPair("LTC","USDT")));
-		list.add(buildTransaction(startTime + 3 * hourInMs , 244, new  CurrencyPair("LTC","USDT")));
-		list.add(buildTransaction(startTime + 4 * hourInMs , 270, new  CurrencyPair("LTC","USDT")));
-		list.add(buildTransaction(startTime + 5 * hourInMs , 215, new  CurrencyPair("LTC","USDT")));
-		list.add(buildTransaction(startTime + 6 * hourInMs , 202, new  CurrencyPair("LTC","USDT")));
-		list.add(buildTransaction(startTime + 7 * hourInMs , 196, new  CurrencyPair("LTC","USDT")));
+		list.add(buildTransaction(startTime + 2000, 250, new CurrencyPair("LTC", "USDT")));
+		list.add(buildTransaction(startTime + 2 * minInMS, 248, new CurrencyPair("LTC", "USDT")));
+		list.add(buildTransaction(startTime + 4 * minInMS, 221, new CurrencyPair("LTC", "USDT")));
+		list.add(buildTransaction(startTime + 6 * minInMS, 199, new CurrencyPair("LTC", "USDT")));
+		list.add(buildTransaction(startTime + hourInMs + 2 * minInMS, 180, new CurrencyPair("LTC", "USDT")));
+		list.add(buildTransaction(startTime + hourInMs + 4 * minInMS, 189, new CurrencyPair("LTC", "USDT")));
+		list.add(buildTransaction(startTime + hourInMs + 6 * minInMS, 200, new CurrencyPair("LTC", "USDT")));
+		list.add(buildTransaction(startTime + 2 * hourInMs, 239, new CurrencyPair("LTC", "USDT")));
+		list.add(buildTransaction(startTime + 3 * hourInMs, 244, new CurrencyPair("LTC", "USDT")));
+		list.add(buildTransaction(startTime + 4 * hourInMs, 270, new CurrencyPair("LTC", "USDT")));
+		list.add(buildTransaction(startTime + 5 * hourInMs, 215, new CurrencyPair("LTC", "USDT")));
+		list.add(buildTransaction(startTime + 6 * hourInMs, 202, new CurrencyPair("LTC", "USDT")));
+		list.add(buildTransaction(startTime + 7 * hourInMs, 196, new CurrencyPair("LTC", "USDT")));
 		return list;
 	}
 

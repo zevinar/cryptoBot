@@ -2,13 +2,10 @@ package com.zevinar.crypto.exchange.impl;
 
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
-import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.zevinar.crypto.exchange.impl.realexchange.BinanceExchangeHandler;
 import org.apache.commons.collections4.map.HashedMap;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.knowm.xchange.currency.Currency;
@@ -18,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zevinar.crypto.exchange.dto.IOpenTransaction;
+import com.zevinar.crypto.exchange.impl.realexchange.BinanceExchangeHandler;
+import com.zevinar.crypto.utils.FunctionalCodeUtils;
 import com.zevinar.crypto.utils.enums.ExchangeEnum;
 import com.zevinar.crypto.utils.enums.TransactionTypeEnum;
 
@@ -80,8 +79,9 @@ public class SimExchangeHandler extends AbstractTradeExchangeHandler {
 
 
 	@Override
-	public List<Trade> getTradesWithCache(CurrencyPair currencyPair, Long fromId, Long fromTime, Long toTime, Long limit) throws IOException {
-		return new BinanceExchangeHandler().getTradesWithCache(currencyPair, null,fromTime, toTime,null);
+	public List<Trade> getTradesWithCache(CurrencyPair currencyPair, Long fromId, Long fromTime, Long toTime, Long limit)  {
+		final BinanceExchangeHandler binanceExchangeHandler = new BinanceExchangeHandler();
+		return FunctionalCodeUtils.methodRunner( () -> binanceExchangeHandler.getTradesWithCache(currencyPair, null,fromTime, toTime,null));
 	}
 
 

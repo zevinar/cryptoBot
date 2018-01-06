@@ -1,6 +1,5 @@
 package com.zevinar.crypto.bl.impl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -34,7 +33,6 @@ public class StrategySimulator {
 		simulator.setNumOfDays(2);
 		strategy.init(exchangeHandler);
 		simulator.runSimulation(strategy, exchangeHandler);
-		
 
 	}
 
@@ -44,18 +42,14 @@ public class StrategySimulator {
 		long numOfHours = numOfDays * 24;
 		for (int i = 0; i < numOfHours; i++) {
 			final long startTime = currentTimeMillis - (numOfHours - i) * HOUR_IN_MS;
-			final long endTime = currentTimeMillis - (numOfHours - i - 1) * HOUR_IN_MS ;
+			final long endTime = currentTimeMillis - (numOfHours - i - 1) * HOUR_IN_MS;
 			List<Trade> fullHourTransactionsList = null;
-			try {
-				fullHourTransactionsList = simExchangeHandler.getTradesWithCache(
-                        strategyCryptoCoinn, null,startTime, endTime,null);
-			} catch (IOException e) {
-				//TODO crypto handle excpetion
-				e.printStackTrace();
-			}
+			fullHourTransactionsList = simExchangeHandler.getTradesWithCache(strategyCryptoCoinn, null, startTime,
+					endTime, null);
 			List<List<Trade>> subSetDataForStrategyCallback = breakDownHourlyData(fullHourTransactionsList,
 					strategy.getStrategySampleRateInSec(), startTime);
-			subSetDataForStrategyCallback.stream().flatMap( List::stream).findFirst().ifPresent(trans -> LOG.debug("Current Quote is : {}", trans));
+			subSetDataForStrategyCallback.stream().flatMap(List::stream).findFirst()
+					.ifPresent(trans -> LOG.debug("Current Quote is : {}", trans));
 			subSetDataForStrategyCallback.stream().forEach(dataList -> {
 				simExchangeHandler.feedData(dataList);
 				strategy.analyzeData(dataList);
@@ -67,8 +61,8 @@ public class StrategySimulator {
 
 	}
 
-	List<List<Trade>> breakDownHourlyData(List<Trade> fullHourTransactionsList,
-			int strategySampleRateInSec, long startTime) {
+	List<List<Trade>> breakDownHourlyData(List<Trade> fullHourTransactionsList, int strategySampleRateInSec,
+			long startTime) {
 
 		List<Predicate<Trade>> predicateList = new ArrayList<>();
 		for (long i = startTime; i <= HOUR_IN_MS + startTime; i = i + strategySampleRateInSec * 1000) {

@@ -41,7 +41,8 @@ import org.knowm.xchange.wex.v3.WexExchange;
 import org.known.xchange.acx.AcxExchange;
 
 public enum ExchangeEnum {
-	WEX(WexExchange.class.getName()), BINANCE(	BinanceExchange.class.getName()),
+	//TODO crypto BUG the name should not be the class name. it should be similar to the name in ExchangeSpecification according to com.zevinar.crypto.exchange.impl.AbstractMarketDataExchangeHandler.getExchangeType() 
+	WEX(WexExchange.class.getName()), BINANCE( BinanceExchange.class.getName()),
 	DSX(DSXExchange.class.getName()), CRYPTOPIA(CryptopiaExchange.class.getName()), BTCTURK(BTCTurkExchange.class.getName()),
 	PARIBU(ParibuExchange.class.getName()), LIQUI(LiquiExchange.class.getName()), GATEIO(GateioExchange.class.getName()),
 	KOINIM(KoinimExchange.class.getName()), ACX(AcxExchange.class.getName())
@@ -73,7 +74,9 @@ public enum ExchangeEnum {
 
 	public static ExchangeEnum fromString(String text) {
 		for (ExchangeEnum b : ExchangeEnum.values()) {
-			if (b.exchangeName.equalsIgnoreCase(text)) {
+			//TODO crypto this is a workaround for a bug
+			// if (b.exchangeName.equalsIgnoreCase(text)) {
+			if (b.name().equalsIgnoreCase(text)) {
 				return b;
 			}
 		}

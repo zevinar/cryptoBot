@@ -29,6 +29,6 @@ public enum CacheHandler {
 	public String buildCacheKey(long fromTime, ExchangeEnum exchangeType, CurrencyPair currencyPair) {
 		String keyTemplate = "%s#%s#%s";
 		String dateKey = DateUtils.buildDateHourlyKey(fromTime);
-		return String.format(keyTemplate, exchangeType.getExchangeName(), currencyPair.toString(), dateKey);
+		return String.format(keyTemplate, exchangeType.name(), currencyPair.toString(), dateKey);
 	}
 }

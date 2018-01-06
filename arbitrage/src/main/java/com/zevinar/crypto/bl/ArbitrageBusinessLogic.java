@@ -71,8 +71,8 @@ public final class ArbitrageBusinessLogic {
 	}
 	protected static IDeal calculateDeal(ICoinQuote buyFirstExchange, ICoinQuote sellSecondExchange,
 			ICoinQuote buySecondExchange, ICoinQuote sellFirstExchange, IExchangeHandlerForArbitrage firstExchange, IExchangeHandlerForArbitrage secondExchange) {
-		final BigDecimal percentageAfterFirstExchangeTransactionFee = BigDecimal.valueOf(1 - firstExchange.getTransactionFee());
-		final BigDecimal percentageAfterSecondExchangeTransactionFee = BigDecimal.valueOf(1 - secondExchange.getTransactionFee());
+		final BigDecimal percentageAfterFirstExchangeTransactionFee = BigDecimal.valueOf(1 - firstExchange.getTradingFee());
+		final BigDecimal percentageAfterSecondExchangeTransactionFee = BigDecimal.valueOf(1 - secondExchange.getTradingFee());
 		
 		BigDecimal initialCashSpent = new BigDecimal(buyFirstExchange.getUSDollarBuy()) ;
 		BigDecimal numCoinBoughtFirst =  initialCashSpent.multiply(percentageAfterFirstExchangeTransactionFee).divide(initialCashSpent, 0);

@@ -15,6 +15,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Trade;
 import org.mockito.Mockito;
@@ -71,13 +72,13 @@ public class StrategySimulatorTest {
 		strategy.init(exchangeHandler);
 		try {
 			Mockito.doReturn(buildTransactionList()).when(exchangeHandler)
-                    .getSingleCoinTransactions(Mockito.any(CurrencyPair.class), Mockito.anyLong(), Mockito.anyLong());
+                    .getTradesWithCache(Mockito.any(CurrencyPair.class),Mockito.isNull(), Mockito.anyLong(), Mockito.anyLong(),Mockito.isNull());
 		} catch (IOException e) {
 			//TODO handle
 			e.printStackTrace();
 		}
 		simulator.runSimulation(strategy, exchangeHandler);
-		assertThat(((int) (exchangeHandler.getCurrentCashUSD() * 100))/100.0 , is(15.24));
+		assertThat(((int) (exchangeHandler.getCoinBalance(Currency.USD) * 100))/100.0 , is(15.24));
 		assertThat(exchangeHandler.getOpenTransactions().size(), is(1));
 
 	}

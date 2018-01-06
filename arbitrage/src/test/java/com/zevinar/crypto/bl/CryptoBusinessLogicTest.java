@@ -3,7 +3,6 @@ package com.zevinar.crypto.bl;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
-import java.util.Currency;
 import java.util.List;
 
 import org.junit.Assert;
@@ -14,7 +13,7 @@ import org.mockito.Mockito;
 import com.zevinar.crypto.bl.interfcaes.IDeal;
 import com.zevinar.crypto.exchange.interfcaes.ICoinQuote;
 import com.zevinar.crypto.exchange.interfcaes.IExchangeHandlerForArbitrage;
-import com.zevinar.crypto.utils.enums.ExchangeDetailsEnum;
+import com.zevinar.crypto.utils.enums.ExchangeEnum;
 
 public class CryptoBusinessLogicTest {
 
@@ -52,7 +51,7 @@ public class CryptoBusinessLogicTest {
 		ICoinQuote ltcFirstExchange = buildMockQuote(350, 346, new  CurrencyPair("LTC","USDT"));
 		ICoinQuote btcFirstExchange = buildMockQuote(17000, 16900, CurrencyPair.BTC_USDT);
 		ICoinQuote ethFirstExchange = buildMockQuote(850, 833, new  CurrencyPair("ETH","USDT"));
-		IExchangeHandlerForArbitrage binanceExchange = buildMockHandler(0.02, 0.01, ExchangeDetailsEnum.BNC,
+		IExchangeHandlerForArbitrage binanceExchange = buildMockHandler(0.02, 0.01, ExchangeEnum.BINANCE,
 				Arrays.asList(ltcFirstExchange, btcFirstExchange, ethFirstExchange));
 		
 		
@@ -60,7 +59,7 @@ public class CryptoBusinessLogicTest {
 		ICoinQuote btcSecondExchange = buildMockQuote(15000, 14800,CurrencyPair.BTC_USDT);
 		ICoinQuote ethSecondExchange = buildMockQuote(700, 687, new  CurrencyPair("ETH","USDT"));
 		ICoinQuote dashSecondExchange = buildMockQuote(900, 897, new  CurrencyPair("DASH","USDT"));
-		IExchangeHandlerForArbitrage wexExchange = buildMockHandler(0.02, 0.01, ExchangeDetailsEnum.WEX,
+		IExchangeHandlerForArbitrage wexExchange = buildMockHandler(0.02, 0.01, ExchangeEnum.WEX,
 				Arrays.asList(ltcSecondExchange, btcSecondExchange, ethSecondExchange, dashSecondExchange));
 		
 		IDeal deal = ArbitrageBusinessLogic.calculateBestArbitrage(binanceExchange, wexExchange);
@@ -73,12 +72,12 @@ public class CryptoBusinessLogicTest {
 		return buildMockHandler(transactionFee, moveCoinFee, null, null);
 	}
 
-	private IExchangeHandlerForArbitrage buildMockHandler(double transactionFee, double moveCoinFee, ExchangeDetailsEnum details,
+	private IExchangeHandlerForArbitrage buildMockHandler(double transactionFee, double moveCoinFee, ExchangeEnum details,
 			List<ICoinQuote> quotes) {
 		IExchangeHandlerForArbitrage handler = Mockito.mock(IExchangeHandlerForArbitrage.class);
-		Mockito.when(handler.getTransactionFee()).thenReturn(transactionFee);
+		Mockito.when(handler.getTradingFee()).thenReturn(transactionFee);
 		Mockito.when(handler.getMoveCoinFee()).thenReturn(moveCoinFee);
-		Mockito.when(handler.getExchangeDetails()).thenReturn(details);
+		Mockito.when(handler.getExchangeType()).thenReturn(details);
 		Mockito.when(handler.getAllCoinsQuotes()).thenReturn(quotes);
 		return handler;
 	}

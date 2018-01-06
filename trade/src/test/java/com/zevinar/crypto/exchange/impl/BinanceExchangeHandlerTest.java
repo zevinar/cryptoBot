@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.is;
 import java.io.IOException;
 import java.util.List;
 
+import com.zevinar.crypto.exchange.impl.realexchange.BinanceExchangeHandler;
 import org.junit.Test;
 
 import org.knowm.xchange.currency.CurrencyPair;
@@ -16,7 +17,7 @@ import org.knowm.xchange.dto.marketdata.Trade;
 public class BinanceExchangeHandlerTest {
 	@Test
 	public void testGetSingleCoinQuotes() {
-		BinanceTradeExchangeHandler handler = new BinanceTradeExchangeHandler();
+		BinanceExchangeHandler handler = new BinanceExchangeHandler();
 		long currentTimeMillis = System.currentTimeMillis();
 		//Max 23 Days Back
 		int daysBack = 0;
@@ -26,7 +27,7 @@ public class BinanceExchangeHandlerTest {
 		// Last Hour
 		List<Trade> singleCoinQuotes = null;
 		try {
-			singleCoinQuotes = handler.getSingleCoinTransactions(new  CurrencyPair("LTC","USDT"), fromTime, toTime);
+			singleCoinQuotes = handler.getTrades(new  CurrencyPair("LTC","USDT"),null, fromTime, toTime,null);
 		} catch (IOException e) {
 			//TODO handle
 			e.printStackTrace();

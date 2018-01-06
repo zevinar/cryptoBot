@@ -9,5 +9,5 @@ public interface IStrategy {
 	int getStrategySampleRateInSec();
 	CurrencyPair getCoinOfIntrest();
 	boolean analyzeData(List<Trade> data);
-	void init(IExchangeHandler exchangeHandler);
+	void init(ITradeExchangeHandler exchangeHandler);
 }

@@ -47,8 +47,8 @@ public class StrategySimulator {
 			final long endTime = currentTimeMillis - (numOfHours - i - 1) * HOUR_IN_MS ;
 			List<Trade> fullDayTransactionsList = null;
 			try {
-				fullDayTransactionsList = simExchangeHandler.getSingleCoinTransactions(
-                        strategyCryptoCoinn, startTime, endTime);
+				fullDayTransactionsList = simExchangeHandler.getTradesWithCache(
+                        strategyCryptoCoinn, null,startTime, endTime,null);
 			} catch (IOException e) {
 				//TODO handle excpetion
 				e.printStackTrace();

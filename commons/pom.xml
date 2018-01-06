@@ -216,7 +216,7 @@
 
         <!--<dependency>-->
         <!--<groupId>org.knowm.xchange</groupId>-->
-        <!--<artifactId>xchange-Poloniex</artifactId>-->
+        <!--<artifactId>xchange-poloniex</artifactId>-->
         <!--<version>${xchange.version}</version>-->
         <!--</dependency>-->
         <dependency>

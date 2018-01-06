@@ -2,12 +2,15 @@ package com.zevinar.crypto.exchange.impl;
 
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.zevinar.crypto.exchange.dto.OpenTransactionImpl;
 import com.zevinar.crypto.exchange.interfcaes.IExchangeHandler;
+import com.zevinar.crypto.exchange.interfcaes.ITradeExchangeHandler;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Trade;
 import org.slf4j.Logger;
@@ -20,7 +23,7 @@ import com.zevinar.crypto.utils.enums.TransactionTypeEnum;
 
 public class SimpleStrategy implements IStrategy {
 	private static final Logger LOG = LoggerFactory.getLogger(SimpleStrategy.class);
-	private IExchangeHandler exchangeHandler;
+	private ITradeExchangeHandler exchangeHandler;
 	private double bidDiscount = 0.16;
 	private double sellProfit = 0.2;
 	@Override
@@ -39,11 +42,21 @@ public class SimpleStrategy implements IStrategy {
 		boolean continueAnalysis = true;
 		if (!isEmpty(dataList)) {
 			CurrencyPair coinType = dataList.get(NumberUtils.INTEGER_ZERO).getCurrencyPair();
-			List<IOpenTransaction> openTransactions = exchangeHandler.getOpenTransactions();
+			List<IOpenTransaction> openTransactions = exchangeHandler.getOpenTransactions();//TODO change to getopenorders
 			boolean hasOpenTransactions = !isEmpty(openTransactions);
-			boolean hasCoinsForTrade = exchangeHandler.getCoinBalance(coinType.base) >= 0.1; // coinType.getMinCoinForTrade();
+			boolean hasCoinsForTrade = false; // coinType.getMinCoinForTrade();
+			try {
+				hasCoinsForTrade = exchangeHandler.getCoinBalance(coinType.base) >= 0.1;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			//TODO calculate getMinCoinForTrade using Xchange api
-			boolean hasCashForTrade = exchangeHandler.getCurrentCashUSD() >= Constants.MIN_CASH_FOR_TRADE_USD;
+			boolean hasCashForTrade = false;
+			try {
+				hasCashForTrade = exchangeHandler.getCoinBalance(Currency.USD) >= Constants.MIN_CASH_FOR_TRADE_USD;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			boolean isBroke = !hasCoinsForTrade && !hasOpenTransactions && !hasCashForTrade;
 			if (isBroke) {
 				LOG.debug("Strategy is Bankrupt");
@@ -56,9 +69,14 @@ public class SimpleStrategy implements IStrategy {
 				actualBuyPrice = wantedBuyPrice;
 			
 				wantedSellPrice = (NumberUtils.DOUBLE_ONE + sellProfit) * actualBuyPrice;
-				final OpenTransactionImpl sellRequest =
-						new OpenTransactionImpl(coinType.base, TransactionTypeEnum.SELL, wantedSellPrice, exchangeHandler.getCoinBalance(coinType.base));
-				LOG.info("Strategy Posting Sell: {}", sellRequest);
+				OpenTransactionImpl sellRequest=null;
+				try {
+					sellRequest = new OpenTransactionImpl(coinType.base, TransactionTypeEnum.SELL, wantedSellPrice, exchangeHandler.getCoinBalance(coinType.base));
+					LOG.info("Strategy Posting Sell: {}", sellRequest);
+					} catch (IOException e) {
+					e.printStackTrace();
+				}
+
 				exchangeHandler.postTransactionRequest(sellRequest);
 
 
@@ -97,7 +115,7 @@ public class SimpleStrategy implements IStrategy {
 	}
 
 	@Override
-	public void init(IExchangeHandler exchangeHandler) {
+	public void init(ITradeExchangeHandler exchangeHandler) {
 		this.exchangeHandler = exchangeHandler;
 	}
 

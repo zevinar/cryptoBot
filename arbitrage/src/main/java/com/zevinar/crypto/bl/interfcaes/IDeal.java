@@ -25,37 +25,31 @@ public interface IDeal extends Comparable<IDeal>{
 
 			@Override
 			public ICoinQuote getCoinBoughtAtFirstExchange() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public ICoinQuote getCoinSoldAtFirstExchange() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public ICoinQuote getCoinBoughtAtSecondExchange() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public ICoinQuote getCoinSoldAtSecondExchange() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public IExchangeHandlerForArbitrage getFirstExchange() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public IExchangeHandlerForArbitrage getSecondExchange() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 		};

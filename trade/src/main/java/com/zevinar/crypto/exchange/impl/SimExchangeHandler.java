@@ -61,7 +61,7 @@ public class SimExchangeHandler extends AbstractTradeExchangeHandler {
 
 	public List<IOpenTransaction> getOpenTransactions() {
 		return openTransactionsList;
-	}//TODO change to getopenorders
+	}//TODO crypto change to getopenorders
 
 	@Override
 	public Double getCoinBalance(Currency coinType) {

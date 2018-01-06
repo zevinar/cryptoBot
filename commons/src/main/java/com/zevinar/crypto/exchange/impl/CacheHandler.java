@@ -10,16 +10,16 @@ import java.util.function.Supplier;
 public enum CacheHandler {
 	INSTANCE;
 	public void addTransactionToCache(Trade data ){
-		//TODO mshitrit implement
+		//TODO crypto implement
 	}
 
 	public Optional< List<Trade>> getRecords(CurrencyPair coinType, long fromTime, long toTime) {
-		//TODO mshitrit implement
+		//TODO crypto implement
 		return Optional.empty();
 	}
 
 	public Supplier< List<Trade>> fillCache( List<Trade> recordsFromExchange) {
-		//TODO mshitrit implement
+		//TODO crypto implement
 		return () -> recordsFromExchange;
 	}
 }

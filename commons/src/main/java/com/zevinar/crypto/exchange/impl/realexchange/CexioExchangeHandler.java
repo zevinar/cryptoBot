@@ -28,8 +28,9 @@ public class CexioExchangeHandler extends AbstractMarketDataExchangeHandler {
 	}
 
 	public  List<Trade> getTradesWithCache(CurrencyPair currencyPair, Long fromId, Long fromTime, Long toTime, Long limit) throws IOException {
-		Optional< List<Trade>> optionalRec =  CacheHandler.INSTANCE.getRecords(currencyPair, fromTime, toTime);//TODO crypto make sure cache is exchange specific
-		return optionalRec.orElseGet( CacheHandler.INSTANCE.fillCache(getTrades(currencyPair,fromId, fromTime, toTime,limit)));
+		final String cacheKey = CacheHandler.INSTANCE.buildCacheKey(fromTime, getExchangeType(), currencyPair);
+		Optional< List<Trade>> optionalRec =  CacheHandler.INSTANCE.getRecords(cacheKey);
+		return optionalRec.orElseGet( CacheHandler.INSTANCE.fillCache(cacheKey, getTrades(currencyPair,fromId, fromTime, toTime,limit)));
 	}
 
 

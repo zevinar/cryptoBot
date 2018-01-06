@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.map.HashedMap;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.currency.CurrencyPair;
@@ -32,7 +33,6 @@ public class SimExchangeHandler extends AbstractTradeExchangeHandler {
 		return ExchangeEnum.BINANCE;
 	}
 
-
 	@Override
 	public void postTransactionRequest(IOpenTransaction request) {
 		Currency coinType = request.getCoinType();
@@ -50,17 +50,16 @@ public class SimExchangeHandler extends AbstractTradeExchangeHandler {
 				LOG.error("Illegal Transaction Current Coin Amount {}, Transaction: {}", getCoinBalance(coinType),
 						request);
 			} else {
-				coinBalanceMap.put(coinType,getCoinBalance(coinType) - request.getTransactionAmount());
+				coinBalanceMap.put(coinType, getCoinBalance(coinType) - request.getTransactionAmount());
 				openTransactionsList.add(request);
 			}
 		}
 
 	}
 
-
 	public List<IOpenTransaction> getOpenTransactions() {
 		return openTransactionsList;
-	}//TODO crypto change to getopenorders
+	}// TODO crypto change to getopenorders
 
 	@Override
 	public Double getCoinBalance(Currency coinType) {
@@ -74,16 +73,13 @@ public class SimExchangeHandler extends AbstractTradeExchangeHandler {
 		return balance;
 	}
 
-
-
-
-
 	@Override
-	public List<Trade> getTradesWithCache(CurrencyPair currencyPair, Long fromId, Long fromTime, Long toTime, Long limit)  {
+	public List<Trade> getTradesWithCache(CurrencyPair currencyPair, Long fromId, Long fromTime, Long toTime,
+			Long limit) {
 		final BinanceExchangeHandler binanceExchangeHandler = new BinanceExchangeHandler();
-		return FunctionalCodeUtils.methodRunner( () -> binanceExchangeHandler.getTradesWithCache(currencyPair, null,fromTime, toTime,null));
+		return FunctionalCodeUtils.methodRunner(
+				() -> binanceExchangeHandler.getTradesWithCache(currencyPair, null, fromTime, toTime, null));
 	}
-
 
 	public void feedData(List<Trade> dataList) {
 		if (!isEmpty(dataList) && !isEmpty(openTransactionsList)) {
@@ -93,12 +89,14 @@ public class SimExchangeHandler extends AbstractTradeExchangeHandler {
 					&& openTransaction.getCoinUsdPrice() >= Trade.getPrice().doubleValue()) {
 				openTransactionsList.remove(openTransaction);
 				LOG.info("Transaction Performed {}", openTransaction);
-				double coinAmountBought = (1 - getTradingFee() ) * openTransaction.getTransactionAmount() / openTransaction.getCoinUsdPrice();
+				double coinAmountBought = (1 - getTradingFee()) * openTransaction.getTransactionAmount()
+						/ openTransaction.getCoinUsdPrice();
 				coinBalanceMap.put(openTransaction.getCoinType(), coinAmountBought);
 
 			} else if (openTransaction.getTransactionType() == TransactionTypeEnum.SELL
 					&& openTransaction.getCoinUsdPrice() <= Trade.getPrice().doubleValue()) {
-				currentCashUSD +=  (1 - getTradingFee() ) * openTransaction.getCoinUsdPrice() * openTransaction.getTransactionAmount();
+				currentCashUSD += (1 - getTradingFee()) * openTransaction.getCoinUsdPrice()
+						* openTransaction.getTransactionAmount();
 				openTransactionsList.remove(openTransaction);
 				LOG.info("Transaction Performed {} Current Cache is: {}", openTransaction, currentCashUSD);
 			}
@@ -111,4 +109,26 @@ public class SimExchangeHandler extends AbstractTradeExchangeHandler {
 		return 0.02;
 	}
 
+	public void printStatus() {
+		String printLine = String.format("Strategy Status: current Cash: %s ", currentCashUSD);
+		if (!isEmpty(openTransactionsList)) {
+			IOpenTransaction iOpenTransaction = openTransactionsList.get(NumberUtils.INTEGER_ZERO);
+			final double amountInTransaction = iOpenTransaction.getTransactionAmount();
+			switch (iOpenTransaction.getTransactionType()) {
+			case BUY:
+				printLine += String.format("Cache In Transactions: %s, total Cache: %s", amountInTransaction,
+						amountInTransaction + currentCashUSD);
+				break;
+			case SELL:
+				printLine += String.format("Coins In Transactions: %s %s", amountInTransaction,
+						iOpenTransaction.getCoinType().getDisplayName());
+				break;
+			default:
+				throw new NotImplementedException(
+						String.format("Not Implemented For enum with value %s", iOpenTransaction.getTransactionType()));
+			}
+
+		}
+		LOG.info(printLine);
+	}
 }

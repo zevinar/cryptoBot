@@ -46,8 +46,10 @@ public class StrategySimulator {
 					endTime, null);
 			List<List<Trade>> subSetDataForStrategyCallback = breakDownHourlyData(fullHourTransactionsList,
 					strategy.getStrategySampleRateInSec(), startTime);
-			subSetDataForStrategyCallback.stream().flatMap(List::stream).findFirst()
-					.ifPresent(trans -> LOG.debug("Current Quote is : {}", trans));
+			if (i % 24 == 0) {
+				subSetDataForStrategyCallback.stream().flatMap(List::stream).findFirst()
+						.ifPresent(trans -> LOG.info("Current Quote is : {}", trans));
+			}
 			subSetDataForStrategyCallback.stream().forEach(dataList -> {
 				simExchangeHandler.feedData(dataList);
 				strategy.analyzeData(dataList);
@@ -56,6 +58,7 @@ public class StrategySimulator {
 			FunctionalCodeUtils.methodRunner((RunnableThrows<InterruptedException>) () -> Thread.sleep(sleepDuration));
 
 		}
+		simExchangeHandler.printStatus();
 
 	}
 

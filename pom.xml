@@ -13,6 +13,7 @@
 		<module>commons</module>
 		<module>arbitrage</module>
 		<module>trade</module>
+		<module>db</module>
 	</modules>
 
 	<dependencies>

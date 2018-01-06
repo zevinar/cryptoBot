@@ -17,4 +17,12 @@ public final class DateUtils {
 		return newTime;
 	}
 	
+	public static String buildDateHourlyKey(long fromTime) {
+		long roundedTime = roundToClosetHour(fromTime);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(roundedTime);
+		String template = "%s-%s-%s:%s:00";
+		return String.format(template, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR), calendar.get(Calendar.HOUR_OF_DAY));
+	}
+	
 }

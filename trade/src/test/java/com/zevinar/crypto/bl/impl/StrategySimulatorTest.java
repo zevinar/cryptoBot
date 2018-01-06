@@ -74,7 +74,7 @@ public class StrategySimulatorTest {
 			Mockito.doReturn(buildTransactionList()).when(exchangeHandler)
                     .getTradesWithCache(Mockito.any(CurrencyPair.class),Mockito.isNull(), Mockito.anyLong(), Mockito.anyLong(),Mockito.isNull());
 		} catch (IOException e) {
-			//TODO handle
+			//TODO crypto handle
 			e.printStackTrace();
 		}
 		simulator.runSimulation(strategy, exchangeHandler);

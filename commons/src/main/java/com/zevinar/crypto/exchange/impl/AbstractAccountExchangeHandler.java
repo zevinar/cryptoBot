@@ -80,7 +80,7 @@ public abstract class AbstractAccountExchangeHandler extends AbstractMarketDataE
 
 	@Override
 	public Double getCoinBalance(Currency coinType) throws IOException {
-			Wallet ret = accountService.getAccountInfo().getWallet();//TODO assumes one wallet
+			Wallet ret = accountService.getAccountInfo().getWallet();//TODO crypto assumes one wallet
 			return ret.getBalance(coinType).getAvailable().doubleValue();
 
 	}

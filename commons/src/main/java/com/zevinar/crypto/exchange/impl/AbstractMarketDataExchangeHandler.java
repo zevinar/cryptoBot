@@ -21,7 +21,7 @@ import javax.annotation.PostConstruct;
 public abstract class AbstractMarketDataExchangeHandler implements IMarketDataExchangeHandler {
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractMarketDataExchangeHandler.class);
 
-	//TODO init as spring DI
+	//TODO crypto init as spring DI
 	public static  Exchange INSTANCE=null;
 	protected static MarketDataService marketDataService=null;
 
@@ -29,7 +29,7 @@ public abstract class AbstractMarketDataExchangeHandler implements IMarketDataEx
 		return INSTANCE;
 	}
 
-	//TODO init as spring DI
+	//TODO crypto init as spring DI
 	public static void init() {
 
 		marketDataService=getExchange().getMarketDataService();
@@ -58,7 +58,7 @@ public abstract class AbstractMarketDataExchangeHandler implements IMarketDataEx
 		return marketDataService.getOrderBook(pair);  //works different in each echange
 	}
 
-	public Double getTradingFee() {//TODO  get real fee (might be different between exchanges, coins, trade size etc...)
+	public Double getTradingFee() {//TODO  crypto get real fee (might be different between exchanges, coins, trade size etc...)
 		return 0.02;
 	}
 

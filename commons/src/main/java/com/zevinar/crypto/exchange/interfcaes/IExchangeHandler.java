@@ -6,6 +6,6 @@ public interface IExchangeHandler {
 
 	ExchangeEnum getExchangeType() ;
 
-	Double getTradingFee();//TODO
+	Double getTradingFee();//TODO crypto
 
 }

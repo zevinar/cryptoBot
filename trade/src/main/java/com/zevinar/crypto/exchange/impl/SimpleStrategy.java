@@ -42,7 +42,7 @@ public class SimpleStrategy implements IStrategy {
 		boolean continueAnalysis = true;
 		if (!isEmpty(dataList)) {
 			CurrencyPair coinType = dataList.get(NumberUtils.INTEGER_ZERO).getCurrencyPair();
-			List<IOpenTransaction> openTransactions = exchangeHandler.getOpenTransactions();//TODO change to getopenorders
+			List<IOpenTransaction> openTransactions = exchangeHandler.getOpenTransactions();//TODO crypto change to getopenorders
 			boolean hasOpenTransactions = !isEmpty(openTransactions);
 			boolean hasCoinsForTrade = false; // coinType.getMinCoinForTrade();
 			try {
@@ -50,7 +50,7 @@ public class SimpleStrategy implements IStrategy {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			//TODO calculate getMinCoinForTrade using Xchange api
+			//TODO crypto calculate getMinCoinForTrade using Xchange api
 			boolean hasCashForTrade = false;
 			try {
 				hasCashForTrade = exchangeHandler.getCoinBalance(Currency.USD) >= Constants.MIN_CASH_FOR_TRADE_USD;
@@ -102,7 +102,7 @@ public class SimpleStrategy implements IStrategy {
 	private void handleOpenTransactions(List<IOpenTransaction> openTransactions) {
 		 
 		IOpenTransaction openTransaction = openTransactions.get(NumberUtils.INTEGER_ZERO);
-		//TODO openTransaction might be null
+		//TODO crypto openTransaction might be null
 		switch (openTransaction.getTransactionType()) {
 		case BUY:
 			break;

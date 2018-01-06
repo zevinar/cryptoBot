@@ -3,7 +3,7 @@ package com.zevinar.crypto.exchange.dto;
 import com.zevinar.crypto.utils.enums.TransactionTypeEnum;
 import org.knowm.xchange.currency.Currency;
 
-//TODO change to Xchange data type
+//TODO crypto change to Xchange data type
 public class OpenTransactionImpl implements IOpenTransaction{
 	private Currency coinType;
 	private TransactionTypeEnum transactionType;

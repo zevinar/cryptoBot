@@ -31,7 +31,7 @@ public class StrategySimulator {
 		StrategySimulator simulator = new StrategySimulator();
 		SimExchangeHandler exchangeHandler = new SimExchangeHandler();
 		SimpleStrategy strategy = new SimpleStrategy();
-		simulator.setNumOfDays(7);
+		simulator.setNumOfDays(2);
 		strategy.init(exchangeHandler);
 		simulator.runSimulation(strategy, exchangeHandler);
 		
@@ -45,15 +45,15 @@ public class StrategySimulator {
 		for (int i = 0; i < numOfHours; i++) {
 			final long startTime = currentTimeMillis - (numOfHours - i) * HOUR_IN_MS;
 			final long endTime = currentTimeMillis - (numOfHours - i - 1) * HOUR_IN_MS ;
-			List<Trade> fullDayTransactionsList = null;
+			List<Trade> fullHourTransactionsList = null;
 			try {
-				fullDayTransactionsList = simExchangeHandler.getTradesWithCache(
+				fullHourTransactionsList = simExchangeHandler.getTradesWithCache(
                         strategyCryptoCoinn, null,startTime, endTime,null);
 			} catch (IOException e) {
-				//TODO handle excpetion
+				//TODO crypto handle excpetion
 				e.printStackTrace();
 			}
-			List<List<Trade>> subSetDataForStrategyCallback = breakDownHourlyData(fullDayTransactionsList,
+			List<List<Trade>> subSetDataForStrategyCallback = breakDownHourlyData(fullHourTransactionsList,
 					strategy.getStrategySampleRateInSec(), startTime);
 			subSetDataForStrategyCallback.stream().flatMap( List::stream).findFirst().ifPresent(trans -> LOG.debug("Current Quote is : {}", trans));
 			subSetDataForStrategyCallback.stream().forEach(dataList -> {

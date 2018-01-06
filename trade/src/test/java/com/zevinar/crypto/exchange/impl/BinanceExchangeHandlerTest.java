@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.List;
 
 import com.zevinar.crypto.exchange.impl.realexchange.BinanceExchangeHandler;
+import com.zevinar.crypto.utils.FunctionalCodeUtils;
+
 import org.junit.Test;
 
 import org.knowm.xchange.currency.CurrencyPair;
@@ -19,19 +21,14 @@ public class BinanceExchangeHandlerTest {
 	public void testGetSingleCoinQuotes() {
 		BinanceExchangeHandler handler = new BinanceExchangeHandler();
 		long currentTimeMillis = System.currentTimeMillis();
-		//Max 23 Days Back
+		// Max 23 Days Back
 		int daysBack = 0;
 		// long fromTime = currentTimeMillis - 60 * 60 * 1000;
-		long fromTime = currentTimeMillis - (daysBack * DAY_IN_MS + 2 * HOUR_IN_MS );
+		long fromTime = currentTimeMillis - (daysBack * DAY_IN_MS + 2 * HOUR_IN_MS);
 		long toTime = currentTimeMillis - (daysBack * DAY_IN_MS + HOUR_IN_MS);
 		// Last Hour
-		List<Trade> singleCoinQuotes = null;
-		try {
-			singleCoinQuotes = handler.getTrades(new  CurrencyPair("LTC","USDT"),null, fromTime, toTime,null);
-		} catch (IOException e) {
-			//TODO handle
-			e.printStackTrace();
-		}
+		List<Trade> singleCoinQuotes = FunctionalCodeUtils
+				.methodRunner(() -> handler.getTrades(new CurrencyPair("LTC", "USDT"), null, fromTime, toTime, null));
 		assertThat(singleCoinQuotes.size() > 0, is(true));
 
 	}

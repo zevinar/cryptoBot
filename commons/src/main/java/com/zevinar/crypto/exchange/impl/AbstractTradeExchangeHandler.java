@@ -23,7 +23,7 @@ public abstract class AbstractTradeExchangeHandler extends AbstractAccountExchan
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractTradeExchangeHandler.class);
 
 
-	//TODO init as spring DI
+	//TODO crypto init as spring DI
 	protected static TradeService tradeService=null;
 
 	@PostConstruct

@@ -49,7 +49,7 @@ public interface ITradeExchangeHandler extends IAccountExchangeHandler {
 	//custom
 	 void postTransactionRequest(IOpenTransaction request) ;
 
-	List<IOpenTransaction> getOpenTransactions() ;//TODO remove, use getopenorders
+	List<IOpenTransaction> getOpenTransactions() ;//TODO crypto remove, use getopenorders
 
 
 

@@ -28,7 +28,7 @@ public class BinanceExchangeHandler extends AbstractMarketDataExchangeHandler {
 
 
 	public  List<Trade> getTradesWithCache(CurrencyPair currencyPair, Long fromId, Long fromTime, Long toTime, Long limit) throws IOException {
-		Optional< List<Trade>> optionalRec =  CacheHandler.INSTANCE.getRecords(currencyPair, fromTime, toTime);//TODO make sure cache is exchange specific
+		Optional< List<Trade>> optionalRec =  CacheHandler.INSTANCE.getRecords(currencyPair, fromTime, toTime);//TODO crypto make sure cache is exchange specific
 		return optionalRec.orElseGet( CacheHandler.INSTANCE.fillCache(getTrades(currencyPair,fromId, fromTime, toTime,limit)));
 	}
 

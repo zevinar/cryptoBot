@@ -37,7 +37,7 @@ public class StrategySimulator {
 	public void runSimulation(IStrategy strategy, SimExchangeHandler simExchangeHandler) {
 		long currentTimeMillis = DateUtils.roundToClosetHour(System.currentTimeMillis());
 		CurrencyPair strategyCryptoCoinn = strategy.getCoinOfIntrest();
-		long numOfHours = numOfDays * 24L;
+		long numOfHours = calculateNumOfHours();
 		for (int i = 0; i < numOfHours; i++) {
 			final long startTime = currentTimeMillis - (numOfHours - i) * DateUtils.HOUR_IN_MS;
 			final long endTime = currentTimeMillis - (numOfHours - i - 1) * DateUtils.HOUR_IN_MS;
@@ -60,6 +60,10 @@ public class StrategySimulator {
 		}
 		simExchangeHandler.printStatus();
 
+	}
+
+	long calculateNumOfHours() {
+		return numOfDays * 24L;
 	}
 
 	List<List<Trade>> breakDownHourlyData(List<Trade> fullHourTransactionsList, int strategySampleRateInSec,

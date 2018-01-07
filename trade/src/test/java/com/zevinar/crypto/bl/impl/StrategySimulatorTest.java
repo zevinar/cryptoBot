@@ -3,6 +3,7 @@ package com.zevinar.crypto.bl.impl;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -70,12 +71,28 @@ public class StrategySimulatorTest {
 		strategy.setSellProfit(0.2);
 		strategy.init(exchangeHandler);
 
-		doReturn(buildTransactionList()).when(exchangeHandler).
-				getTradesWithCache(Mockito.any(CurrencyPair.class), Mockito.isNull(),
-						Mockito.anyLong(), Mockito.anyLong(), Mockito.isNull());
+		doReturn(buildTransactionList()).when(exchangeHandler).getTradesWithCache(Mockito.any(CurrencyPair.class),
+				Mockito.isNull(), Mockito.anyLong(), Mockito.anyLong(), Mockito.isNull());
 		simulator.runSimulation(strategy, exchangeHandler);
 		assertThat(((int) (exchangeHandler.getCoinBalance(Currency.USD) * 100)) / 100.0, is(15.24));
 		assertThat(exchangeHandler.getOpenTransactions().size(), is(1));
+
+	}
+
+	@Test
+	public void testRunSimulationLive() {
+		StrategySimulator simulator = Mockito.spy(new StrategySimulator());
+		doReturn(1L).when(simulator).calculateNumOfHours();
+		SimExchangeHandler exchangeHandler = Mockito.spy(new SimExchangeHandler());
+		SimpleStrategy strategy = new SimpleStrategy();
+		strategy.setBidDiscount(0.2);
+		strategy.setSellProfit(0.2);
+		strategy.init(exchangeHandler);
+
+		simulator.runSimulation(strategy, exchangeHandler);
+		verify(exchangeHandler, Mockito.times(1)).getTradesWithCache(Mockito.any(CurrencyPair.class), Mockito.eq(null),
+				Mockito.anyLong(), Mockito.anyLong(), Mockito.eq(null));
+		verify(exchangeHandler, Mockito.times(1)).printStatus();
 
 	}
 

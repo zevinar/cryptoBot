@@ -25,7 +25,7 @@ import com.zevinar.crypto.utils.enums.ExchangeEnum;
 
 public enum CacheHandler {
 	INSTANCE;
-	Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	Gson gson = new GsonBuilder().create();
 	public Optional<List<Trade>> getRecords(String cacheKey) {
 		 Optional<List<Trade>> ret;
 		File cachedFile = new File(cacheKey);
@@ -50,7 +50,7 @@ public enum CacheHandler {
 	}
 
 	public String buildCacheKey(long fromTime, ExchangeEnum exchangeType, CurrencyPair currencyPair) {
-		String keyTemplate = ".." + File.separator + "db"+File.separator+"src"+File.separator+"main"+File.separator+"resources"+File.separator+"%s#%s#%s";
+		String keyTemplate = ".." + File.separator + "db"+File.separator+"src"+File.separator+"main"+File.separator+"resources"+File.separator+"%s#%s#%s.db";
 		String dateKey = DateUtils.buildDateHourlyKey(fromTime);
 		String currencyTemplate = "%s%s";
 		return String.format(keyTemplate, exchangeType.name(), String.format(currencyTemplate, currencyPair.base.getSymbol(), currencyPair.counter.getSymbol()), dateKey);

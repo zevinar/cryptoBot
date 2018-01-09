@@ -1,4 +1,4 @@
-package com.zevinar.crypto.exchange;
+package com.zevinar.crypto.impl;
 
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.zevinar.crypto.exchange.dto.OpenTransactionImpl;
 import com.zevinar.crypto.exchange.interfcaes.ITradeExchangeHandler;
+import com.zevinar.crypto.interfcaes.IStrategy;
+
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.knowm.xchange.currency.Currency;
@@ -16,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zevinar.crypto.exchange.dto.IOpenTransaction;
-import com.zevinar.crypto.exchange.interfcaes.IStrategy;
 import com.zevinar.crypto.utils.Constants;
 import com.zevinar.crypto.utils.enums.TransactionTypeEnum;
 

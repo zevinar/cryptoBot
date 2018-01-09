@@ -1,4 +1,4 @@
-package com.zevinar.crypto.exchange;
+package com.zevinar.crypto.exchange.realexchange;
 
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
@@ -15,8 +15,8 @@ import org.knowm.xchange.dto.marketdata.Trade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zevinar.crypto.exchange.AbstractTradeExchangeHandler;
 import com.zevinar.crypto.exchange.dto.IOpenTransaction;
-import com.zevinar.crypto.exchange.realexchange.BinanceExchangeHandler;
 import com.zevinar.crypto.utils.FunctionalCodeUtils;
 import com.zevinar.crypto.utils.enums.ExchangeEnum;
 import com.zevinar.crypto.utils.enums.TransactionTypeEnum;

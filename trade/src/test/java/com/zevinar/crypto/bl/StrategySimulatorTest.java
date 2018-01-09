@@ -1,4 +1,4 @@
-package com.zevinar.crypto.bl.impl;
+package com.zevinar.crypto.bl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -21,8 +21,9 @@ import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Trade;
 import org.mockito.Mockito;
 
-import com.zevinar.crypto.exchange.SimExchangeHandler;
-import com.zevinar.crypto.exchange.SimpleStrategy;
+import com.zevinar.crypto.bl.StrategySimulator;
+import com.zevinar.crypto.exchange.realexchange.SimExchangeHandler;
+import com.zevinar.crypto.impl.SimpleStrategy;
 import com.zevinar.crypto.utils.DateUtils;
 
 public class StrategySimulatorTest {

@@ -1,4 +1,4 @@
-package com.zevinar.crypto.bl.impl;
+package com.zevinar.crypto.bl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +11,9 @@ import org.knowm.xchange.dto.marketdata.Trade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zevinar.crypto.exchange.SimExchangeHandler;
-import com.zevinar.crypto.exchange.SimpleStrategy;
-import com.zevinar.crypto.exchange.interfcaes.IStrategy;
+import com.zevinar.crypto.exchange.realexchange.SimExchangeHandler;
+import com.zevinar.crypto.impl.SimpleStrategy;
+import com.zevinar.crypto.interfcaes.IStrategy;
 import com.zevinar.crypto.utils.DateUtils;
 import com.zevinar.crypto.utils.FunctionalCodeUtils;
 import com.zevinar.crypto.utils.FunctionalCodeUtils.RunnableThrows;

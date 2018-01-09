@@ -17,6 +17,11 @@
 	</modules>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>0.9.11</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.functionaljava/functionaljava -->
 		<dependency>
 			<groupId>org.functionaljava</groupId>
@@ -86,6 +91,8 @@
 			<version>1.3</version>
 			<scope>test</scope>
 		</dependency>
+
+
 		<!-- Tests End -->
 
 	</dependencies>

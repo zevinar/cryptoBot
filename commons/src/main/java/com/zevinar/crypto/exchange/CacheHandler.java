@@ -1,4 +1,4 @@
-package com.zevinar.crypto.exchange.impl;
+package com.zevinar.crypto.exchange;
 
 import java.util.List;
 import java.util.Optional;

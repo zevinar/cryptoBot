@@ -30,34 +30,66 @@ import org.knowm.xchange.koineks.KoineksExchange;
 import org.knowm.xchange.koinim.KoinimExchange;
 import org.knowm.xchange.kraken.KrakenExchange;
 import org.knowm.xchange.liqui.LiquiExchange;
+import org.knowm.xchange.livecoin.LivecoinExchange;
 import org.knowm.xchange.mercadobitcoin.MercadoBitcoinExchange;
 import org.knowm.xchange.okcoin.OkCoinExchange;
 import org.knowm.xchange.paribu.ParibuExchange;
+import org.knowm.xchange.poloniex.PoloniexExchange;
 import org.knowm.xchange.quoine.QuoineExchange;
 import org.knowm.xchange.ripple.RippleExchange;
 import org.knowm.xchange.therock.TheRockExchange;
 import org.knowm.xchange.vircurex.VircurexExchange;
 import org.knowm.xchange.wex.v3.WexExchange;
+import org.knowm.xchange.yobit.YoBitExchange;
 import org.known.xchange.acx.AcxExchange;
 
 public enum ExchangeEnum {
-	//TODO crypto BUG the name should not be the class name. it should be similar to the name in ExchangeSpecification according to com.zevinar.crypto.exchange.impl.AbstractMarketDataExchangeHandler.getExchangeType() 
-	WEX(WexExchange.class.getName()), BINANCE( BinanceExchange.class.getName()),
-	DSX(DSXExchange.class.getName()), CRYPTOPIA(CryptopiaExchange.class.getName()), BTCTURK(BTCTurkExchange.class.getName()),
-	PARIBU(ParibuExchange.class.getName()), LIQUI(LiquiExchange.class.getName()), GATEIO(GateioExchange.class.getName()),
-	KOINIM(KoinimExchange.class.getName()), ACX(AcxExchange.class.getName())
-	, BITFLYER(BitflyerExchange.class.getName()), ANX(ANXExchange.class.getName()), BITBAY(BitbayExchange.class.getName()),
-	BITFINEX(BitfinexExchange.class.getName()), BITMARKET(BitMarketExchange.class.getName()), BITSTAMP(BitstampExchange.class.getName()),
-	BITTREX(BittrexExchange.class.getName()), BLEUTRADE(BleutradeExchange.class.getName())
-	, BTCC(BTCCExchange.class.getName()), BTCTRADE(BTCTradeExchange.class.getName()), CAMPBX(CampBXExchange.class.getName()),
-	CEXIO(CexIOExchange.class.getName()), COINBASE(CoinbaseExchange.class.getName()), COINFLOOR(CoinfloorExchange.class.getName()),
-	COINMATE(CoinmateExchange.class.getName()), CRYPTOFACILITIES(CryptoFacilitiesExchange.class.getName())
-	, GATECOIN(GatecoinExchange.class.getName()),  GDAX(GDAXExchange.class.getName()), HITBTC(HitbtcExchange.class.getName()),
-	INDEPENDENTRESERVE(IndependentReserveExchange.class.getName()), ITBIT(ItBitExchange.class.getName()), KOINEKS(KoineksExchange.class.getName()),
-	KRAKEN(KrakenExchange.class.getName())
-	, MERCADOBITCOIN(MercadoBitcoinExchange.class.getName()), OKCOIN(OkCoinExchange.class.getName()),  QUOINE(QuoineExchange.class.getName()),
-	RIPPLE(RippleExchange.class.getName()), THEROCK(TheRockExchange.class.getName()), VIRCUREX(VircurexExchange.class.getName());
-	//POLONIEX(POLONIEXExchange.class.getName()),
+	WEX(WexExchange.class.getName()),
+	BINANCE( BinanceExchange.class.getName()),
+	CRYPTOPIA(CryptopiaExchange.class.getName()),
+	GATEIO(GateioExchange.class.getName()),
+	BITFINEX(BitfinexExchange.class.getName()),
+	BITTREX(BittrexExchange.class.getName()),
+	CEXIO(CexIOExchange.class.getName()),
+	GDAX(GDAXExchange.class.getName()),
+	HITBTC(HitbtcExchange.class.getName()),
+	KRAKEN(KrakenExchange.class.getName()),
+	LIVECOIN(LivecoinExchange.class.getName()),
+	POLONIEX(PoloniexExchange.class.getName()),
+	BITSTAMP(BitstampExchange.class.getName())
+	;
+
+
+	//YOBIT(YoBitExchange.class.getName()),
+	//DSX(DSXExchange.class.getName()),
+	//BTCTURK(BTCTurkExchange.class.getName()),
+	//PARIBU(ParibuExchange.class.getName()),
+	//LIQUI(LiquiExchange.class.getName()),
+	//KOINIM(KoinimExchange.class.getName()),
+	//ACX(AcxExchange.class.getName()),
+	//BITFLYER(BitflyerExchange.class.getName()),
+	//ANX(ANXExchange.class.getName()),
+	//BITBAY(BitbayExchange.class.getName()),
+	//BITMARKET(BitMarketExchange.class.getName()),
+	//BITSTAMP(BitstampExchange.class.getName()),
+	//BLEUTRADE(BleutradeExchange.class.getName()),
+	//BTCC(BTCCExchange.class.getName()),
+	//BTCTRADE(BTCTradeExchange.class.getName()),
+	//CAMPBX(CampBXExchange.class.getName()),
+	//COINBASE(CoinbaseExchange.class.getName()),
+	//COINFLOOR(CoinfloorExchange.class.getName()),
+	//COINMATE(CoinmateExchange.class.getName()),
+	//CRYPTOFACILITIES(CryptoFacilitiesExchange.class.getName()),
+	//GATECOIN(GatecoinExchange.class.getName()),
+	//INDEPENDENTRESERVE(IndependentReserveExchange.class.getName()),
+//	ITBIT(ItBitExchange.class.getName()),
+//	KOINEKS(KoineksExchange.class.getName()),
+	//MERCADOBITCOIN(MercadoBitcoinExchange.class.getName()),
+	//OKCOIN(OkCoinExchange.class.getName()),
+	//QUOINE(QuoineExchange.class.getName()),
+//	RIPPLE(RippleExchange.class.getName()),
+	//THEROCK(TheRockExchange.class.getName()),
+	//VIRCUREX(VircurexExchange.class.getName())
 
 
 
@@ -74,9 +106,7 @@ public enum ExchangeEnum {
 
 	public static ExchangeEnum fromString(String text) {
 		for (ExchangeEnum b : ExchangeEnum.values()) {
-			//TODO crypto this is a workaround for a bug
-			// if (b.exchangeName.equalsIgnoreCase(text)) {
-			if (b.name().equalsIgnoreCase(text)) {
+			if (b.exchangeName.equalsIgnoreCase(text)) {
 				return b;
 			}
 		}

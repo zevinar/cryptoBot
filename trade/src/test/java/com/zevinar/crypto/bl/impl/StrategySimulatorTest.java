@@ -21,8 +21,8 @@ import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Trade;
 import org.mockito.Mockito;
 
-import com.zevinar.crypto.exchange.impl.SimExchangeHandler;
-import com.zevinar.crypto.exchange.impl.SimpleStrategy;
+import com.zevinar.crypto.exchange.SimExchangeHandler;
+import com.zevinar.crypto.exchange.SimpleStrategy;
 import com.zevinar.crypto.utils.DateUtils;
 
 public class StrategySimulatorTest {

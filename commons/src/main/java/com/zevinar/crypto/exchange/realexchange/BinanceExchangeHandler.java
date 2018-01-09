@@ -1,10 +1,10 @@
-package com.zevinar.crypto.exchange.impl.realexchange;
+package com.zevinar.crypto.exchange.realexchange;
 
+import com.zevinar.crypto.exchange.AbstractMarketDataExchangeHandler;
 import org.knowm.xchange.ExchangeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zevinar.crypto.exchange.impl.AbstractMarketDataExchangeHandler;
 import com.zevinar.crypto.utils.enums.ExchangeEnum;
 
 public class BinanceExchangeHandler extends AbstractMarketDataExchangeHandler {

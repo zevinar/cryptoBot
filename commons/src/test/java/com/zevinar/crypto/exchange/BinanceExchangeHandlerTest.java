@@ -1,18 +1,21 @@
-package com.zevinar.crypto.exchange.impl;
+package com.zevinar.crypto.exchange;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.knowm.xchange.currency.Currency.LTC;
 
 import java.util.List;
+import java.util.Set;
 
+import com.zevinar.crypto.exchange.interfcaes.IMarketDataExchangeHandler;
 import org.junit.Test;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Trade;
 
-import com.zevinar.crypto.exchange.impl.realexchange.BinanceExchangeHandler;
+import com.zevinar.crypto.exchange.realexchange.BinanceExchangeHandler;
 import com.zevinar.crypto.utils.DateUtils;
 import com.zevinar.crypto.utils.FunctionalCodeUtils;
+import org.reflections.Reflections;
 
 public class BinanceExchangeHandlerTest {
 	@Test
@@ -30,4 +33,7 @@ public class BinanceExchangeHandlerTest {
 		assertThat(singleCoinQuotes.size() > 0, is(true));
 
 	}
+
+
+
 }

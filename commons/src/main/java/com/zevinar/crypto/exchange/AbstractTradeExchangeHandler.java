@@ -1,4 +1,4 @@
-package com.zevinar.crypto.exchange.impl;
+package com.zevinar.crypto.exchange;
 
 import com.zevinar.crypto.exchange.dto.IOpenTransaction;
 import com.zevinar.crypto.exchange.interfcaes.ITradeExchangeHandler;
@@ -14,7 +14,6 @@ import org.knowm.xchange.service.trade.params.orders.OpenOrdersParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.Collection;
 
@@ -26,8 +25,8 @@ public abstract class AbstractTradeExchangeHandler extends AbstractAccountExchan
 	//TODO crypto init as spring DI
 	protected static TradeService tradeService=null;
 
-	@PostConstruct
-	public static  void init() {
+
+	public   void init() {
 
 		tradeService=getExchange().getTradeService();
 	}

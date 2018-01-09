@@ -1,19 +1,16 @@
-package com.zevinar.crypto.exchange.impl;
+package com.zevinar.crypto.exchange;
 
 import com.zevinar.crypto.exchange.interfcaes.IAccountExchangeHandler;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.dto.account.AccountInfo;
 import org.knowm.xchange.dto.account.FundingRecord;
 import org.knowm.xchange.dto.account.Wallet;
 import org.knowm.xchange.service.account.AccountService;
-import org.knowm.xchange.service.trade.TradeService;
 import org.knowm.xchange.service.trade.params.TradeHistoryParams;
 import org.knowm.xchange.service.trade.params.WithdrawFundsParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
@@ -28,7 +25,7 @@ public abstract class AbstractAccountExchangeHandler extends AbstractMarketDataE
 
 	//TODO init as spring DI
 
-	public static void init() {
+	public  void init() {
 
 		accountService=getExchange().getAccountService();
 	}

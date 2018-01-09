@@ -1,4 +1,4 @@
-package com.zevinar.crypto.exchange.impl;
+package com.zevinar.crypto.exchange;
 
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.List;
 
 import com.zevinar.crypto.exchange.dto.OpenTransactionImpl;
-import com.zevinar.crypto.exchange.interfcaes.IExchangeHandler;
 import com.zevinar.crypto.exchange.interfcaes.ITradeExchangeHandler;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.math.NumberUtils;

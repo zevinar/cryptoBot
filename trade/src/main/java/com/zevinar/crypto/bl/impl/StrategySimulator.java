@@ -11,8 +11,8 @@ import org.knowm.xchange.dto.marketdata.Trade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zevinar.crypto.exchange.impl.SimExchangeHandler;
-import com.zevinar.crypto.exchange.impl.SimpleStrategy;
+import com.zevinar.crypto.exchange.SimExchangeHandler;
+import com.zevinar.crypto.exchange.SimpleStrategy;
 import com.zevinar.crypto.exchange.interfcaes.IStrategy;
 import com.zevinar.crypto.utils.DateUtils;
 import com.zevinar.crypto.utils.FunctionalCodeUtils;

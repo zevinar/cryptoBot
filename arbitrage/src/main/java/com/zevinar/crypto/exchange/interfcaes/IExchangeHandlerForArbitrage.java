@@ -1,7 +1,5 @@
 package com.zevinar.crypto.exchange.interfcaes;
 
-import com.zevinar.crypto.exchange.impl.AbstractMarketDataExchangeHandler;
-
 import java.util.List;
 
 public interface IExchangeHandlerForArbitrage extends IExchangeHandler {

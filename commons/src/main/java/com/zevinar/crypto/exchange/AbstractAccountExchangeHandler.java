@@ -1,6 +1,11 @@
 package com.zevinar.crypto.exchange;
 
-import com.zevinar.crypto.exchange.interfcaes.IAccountExchangeHandler;
+import static com.zevinar.crypto.utils.FunctionalCodeUtils.methodRunner;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.dto.account.AccountInfo;
 import org.knowm.xchange.dto.account.FundingRecord;
@@ -11,19 +16,17 @@ import org.knowm.xchange.service.trade.params.WithdrawFundsParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.List;
+import com.zevinar.crypto.exchange.interfcaes.IAccountExchangeHandler;
 
 //can get  market data and account info
 public abstract class AbstractAccountExchangeHandler extends AbstractMarketDataExchangeHandler implements IAccountExchangeHandler{
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractAccountExchangeHandler.class);
 
 
-	//TODO init as spring DI
+	//TODO crypto init as spring DI
 	protected static AccountService accountService=null;
 
-	//TODO init as spring DI
+	//TODO crypto init as spring DI
 
 	public  void init() {
 
@@ -76,8 +79,8 @@ public abstract class AbstractAccountExchangeHandler extends AbstractMarketDataE
 	}
 
 	@Override
-	public Double getCoinBalance(Currency coinType) throws IOException {
-			Wallet ret = accountService.getAccountInfo().getWallet();//TODO crypto assumes one wallet
+	public Double getCoinBalance(Currency coinType) {
+			Wallet ret = methodRunner(() -> accountService.getAccountInfo().getWallet());//TODO crypto assumes one wallet
 			return ret.getBalance(coinType).getAvailable().doubleValue();
 
 	}

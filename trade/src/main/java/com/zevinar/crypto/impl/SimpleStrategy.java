@@ -2,12 +2,7 @@ package com.zevinar.crypto.impl;
 
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
-import java.io.IOException;
 import java.util.List;
-
-import com.zevinar.crypto.exchange.dto.OpenTransactionImpl;
-import com.zevinar.crypto.exchange.interfcaes.ITradeExchangeHandler;
-import com.zevinar.crypto.interfcaes.IStrategy;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -18,6 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zevinar.crypto.exchange.dto.IOpenTransaction;
+import com.zevinar.crypto.exchange.dto.OpenTransactionImpl;
+import com.zevinar.crypto.exchange.interfcaes.ITradeExchangeHandler;
+import com.zevinar.crypto.interfcaes.IStrategy;
 import com.zevinar.crypto.utils.Constants;
 import com.zevinar.crypto.utils.enums.TransactionTypeEnum;
 
@@ -26,6 +24,7 @@ public class SimpleStrategy implements IStrategy {
 	private ITradeExchangeHandler exchangeHandler;
 	private double bidDiscount = 0.16;
 	private double sellProfit = 0.2;
+
 	@Override
 	public int getStrategySampleRateInSec() {
 		return 60;
@@ -33,30 +32,31 @@ public class SimpleStrategy implements IStrategy {
 
 	@Override
 	public CurrencyPair getCoinOfIntrest() {
-		return new CurrencyPair("LTC","USDT");
+		return new CurrencyPair("LTC", "USDT");
 	}
+
 	double wantedBuyPrice = 0, actualBuyPrice = 0, wantedSellPrice = 0, actualSellPrice = 0;
+
 	@Override
 	public boolean analyzeData(List<Trade> dataList) {
-		
+
 		boolean continueAnalysis = true;
 		if (!isEmpty(dataList)) {
-			CurrencyPair coinType = dataList.get(NumberUtils.INTEGER_ZERO).getCurrencyPair();
-			List<IOpenTransaction> openTransactions = exchangeHandler.getOpenTransactions();//TODO crypto change to getopenorders
+			final Trade lastTrade = dataList.get(NumberUtils.INTEGER_ZERO);
+			CurrencyPair coinType = lastTrade.getCurrencyPair();
+			List<IOpenTransaction> openTransactions = exchangeHandler.getOpenTransactions();// TODO
+																							// crypto
+																							// change
+																							// to
+																							// getopenorders
 			boolean hasOpenTransactions = !isEmpty(openTransactions);
 			boolean hasCoinsForTrade = false; // coinType.getMinCoinForTrade();
-			try {
-				hasCoinsForTrade = exchangeHandler.getCoinBalance(coinType.base) >= 0.1;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			//TODO crypto calculate getMinCoinForTrade using Xchange api
+
+			hasCoinsForTrade = exchangeHandler.getCoinBalance(coinType.base)
+					* lastTrade.getPrice().doubleValue() >= Constants.MIN_CASH_FOR_TRADE_USD;
+			// TODO crypto calculate getMinCoinForTrade using Xchange api
 			boolean hasCashForTrade = false;
-			try {
-				hasCashForTrade = exchangeHandler.getCoinBalance(Currency.USD) >= Constants.MIN_CASH_FOR_TRADE_USD;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			hasCashForTrade = exchangeHandler.getCoinBalance(Currency.USD) >= Constants.MIN_CASH_FOR_TRADE_USD;
 			boolean isBroke = !hasCoinsForTrade && !hasOpenTransactions && !hasCashForTrade;
 			if (isBroke) {
 				LOG.debug("Strategy is Bankrupt");
@@ -67,25 +67,24 @@ public class SimpleStrategy implements IStrategy {
 				handleOpenTransactions(openTransactions);
 			} else if (hasCoinsForTrade) {
 				actualBuyPrice = wantedBuyPrice;
-			
+
 				wantedSellPrice = (NumberUtils.DOUBLE_ONE + sellProfit) * actualBuyPrice;
-				OpenTransactionImpl sellRequest=null;
-				try {
-					sellRequest = new OpenTransactionImpl(coinType.base, TransactionTypeEnum.SELL, wantedSellPrice, exchangeHandler.getCoinBalance(coinType.base));
+				OpenTransactionImpl sellRequest = null;
+					sellRequest = new OpenTransactionImpl(coinType.base, TransactionTypeEnum.SELL, wantedSellPrice,
+							exchangeHandler.getCoinBalance(coinType.base));
 					LOG.info("Strategy Posting Sell: {}", sellRequest);
-					} catch (IOException e) {
-					e.printStackTrace();
-				}
 
 				exchangeHandler.postTransactionRequest(sellRequest);
 
-
 			} else if (hasCashForTrade) {
 				actualSellPrice = wantedSellPrice;
-				final Trade Trade = dataList.get(NumberUtils.INTEGER_ZERO);
+				final Trade Trade = lastTrade;
 				double lastCoinPrice = Trade.getPrice().doubleValue();
-				wantedBuyPrice = (actualSellPrice > NumberUtils.DOUBLE_ZERO) ? (NumberUtils.DOUBLE_ONE - bidDiscount) * actualSellPrice: (NumberUtils.DOUBLE_ONE - bidDiscount) * lastCoinPrice;
-				final OpenTransactionImpl buyRequest = new OpenTransactionImpl(coinType.base, TransactionTypeEnum.BUY, wantedBuyPrice, 100);
+				wantedBuyPrice = (actualSellPrice > NumberUtils.DOUBLE_ZERO)
+						? (NumberUtils.DOUBLE_ONE - bidDiscount) * actualSellPrice
+						: (NumberUtils.DOUBLE_ONE - bidDiscount) * lastCoinPrice;
+				final OpenTransactionImpl buyRequest = new OpenTransactionImpl(coinType.base, TransactionTypeEnum.BUY,
+						wantedBuyPrice, 100);
 				LOG.info("Strategy Posting Buy: {} ", buyRequest);
 				exchangeHandler.postTransactionRequest(buyRequest);
 
@@ -100,17 +99,17 @@ public class SimpleStrategy implements IStrategy {
 	}
 
 	private void handleOpenTransactions(List<IOpenTransaction> openTransactions) {
-		 
+
 		IOpenTransaction openTransaction = openTransactions.get(NumberUtils.INTEGER_ZERO);
-		//TODO crypto openTransaction might be null
+		// TODO crypto openTransaction might be null
 		switch (openTransaction.getTransactionType()) {
 		case BUY:
 			break;
 		case SELL:
 			break;
 		default:
-			throw new NotImplementedException(String.format("Transaction Type Not Implemented For : %s",
-					openTransaction.getTransactionType()));
+			throw new NotImplementedException(
+					String.format("Transaction Type Not Implemented For : %s", openTransaction.getTransactionType()));
 		}
 	}
 

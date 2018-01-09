@@ -8,5 +8,5 @@ import com.zevinar.crypto.exchange.interfcaes.ITradeExchangeHandler;
 
 public interface IStrategyFeature {
 	void init(ITradeExchangeHandler exchangeHandler);
-	void performDecision(List<Trade> dataList);
+	boolean performDecision(List<Trade> dataList);
 }

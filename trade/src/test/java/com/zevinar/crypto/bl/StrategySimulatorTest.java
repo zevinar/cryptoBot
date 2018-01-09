@@ -24,6 +24,8 @@ import org.mockito.Mockito;
 import com.zevinar.crypto.bl.StrategySimulator;
 import com.zevinar.crypto.exchange.realexchange.SimExchangeHandler;
 import com.zevinar.crypto.impl.SimpleStrategy;
+import com.zevinar.crypto.interfcaes.IStrategyFeature;
+import com.zevinar.crypto.strategy.impl.BasicTradeFeature;
 import com.zevinar.crypto.utils.DateUtils;
 
 public class StrategySimulatorTest {
@@ -66,15 +68,22 @@ public class StrategySimulatorTest {
 	public void testRunSimulation() {
 		simulator.setNumOfDays(1);
 		simulator.setSleepDuration(0);
-		SimExchangeHandler exchangeHandler = Mockito.spy(new SimExchangeHandler());
-		SimpleStrategy strategy = new SimpleStrategy();
-		strategy.setBidDiscount(0.2);
-		strategy.setSellProfit(0.2);
-		strategy.init(exchangeHandler);
+		BasicTradeFeature tradeFeature = new BasicTradeFeature();
+		tradeFeature.setBidDiscount(0.2);
+		tradeFeature.setSellProfit(0.2);
+		SimpleStrategy strategy = new SimpleStrategy(){
+			public List<IStrategyFeature> getFeatures() {
+				return Arrays.asList(tradeFeature);
+			}
+		};
+		final SimExchangeHandler simExchangeHandler = strategy.getSimExchangeHandler();
+		SimExchangeHandler exchangeHandler = Mockito.spy(simExchangeHandler);
+		strategy.setSimExchangeHandler(exchangeHandler);
+		strategy.init();
 
 		doReturn(buildTransactionList()).when(exchangeHandler).getTradesWithCache(Mockito.any(CurrencyPair.class),
 				Mockito.isNull(), Mockito.anyLong(), Mockito.anyLong(), Mockito.isNull());
-		simulator.runSimulation(strategy, exchangeHandler);
+		simulator.runSimulation(strategy);
 		assertThat(((int) (exchangeHandler.getCoinBalance(Currency.USD) * 100)) / 100.0, is(15.24));
 		assertThat(exchangeHandler.getOpenTransactions().size(), is(1));
 
@@ -84,18 +93,19 @@ public class StrategySimulatorTest {
 	public void testRunSimulationLive() {
 		StrategySimulator simulator = Mockito.spy(new StrategySimulator());
 		doReturn(1L).when(simulator).calculateNumOfHours();
-		SimExchangeHandler exchangeHandler = Mockito.spy(new SimExchangeHandler());
+		
 		SimpleStrategy strategy = new SimpleStrategy();
-		strategy.setBidDiscount(0.2);
-		strategy.setSellProfit(0.2);
-		strategy.init(exchangeHandler);
+		SimExchangeHandler exchangeHandler = Mockito.spy(strategy.getSimExchangeHandler());
+		strategy.setSimExchangeHandler(exchangeHandler);
+		
+		strategy.init();
 
-		simulator.runSimulation(strategy, exchangeHandler);
+		simulator.runSimulation(strategy);
 		verify(exchangeHandler, Mockito.times(1)).getTradesWithCache(Mockito.any(CurrencyPair.class), Mockito.eq(null),
 				Mockito.anyLong(), Mockito.anyLong(), Mockito.eq(null));
 		verify(exchangeHandler, Mockito.times(1)).printStatus();
 
-	}
+	} 
 
 	private List<Trade> buildTransactionList() {
 		long minInMS = 60 * 1000;

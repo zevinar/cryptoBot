@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.zevinar.crypto.exchange.realexchange.SimExchangeHandler;
 import com.zevinar.crypto.impl.SimpleStrategy;
-import com.zevinar.crypto.interfcaes.IStrategy;
+import com.zevinar.crypto.interfcaes.AbstractSimulationStrategy;
 import com.zevinar.crypto.utils.DateUtils;
 import com.zevinar.crypto.utils.FunctionalCodeUtils;
 import com.zevinar.crypto.utils.FunctionalCodeUtils.RunnableThrows;
@@ -32,14 +32,13 @@ public class StrategySimulator {
 	}
 
 	private static void runBasicStrategy(StrategySimulator simulator) {
-		SimExchangeHandler exchangeHandler = new SimExchangeHandler();
 		SimpleStrategy strategy = new SimpleStrategy();
-		strategy.init(exchangeHandler);
-		simulator.runSimulation(strategy, exchangeHandler);
+		strategy.init();
+		simulator.runSimulation(strategy);
 	}
 
-	public void runSimulation(IStrategy strategy, SimExchangeHandler simExchangeHandler) {
- 
+	public void runSimulation(AbstractSimulationStrategy strategy) {
+		SimExchangeHandler simExchangeHandler = strategy.getSimExchangeHandler();
 		final long startTimeMillis = System.currentTimeMillis();
 		long roundedCurrentTimeMillis = DateUtils.roundToClosetHour(startTimeMillis);
 		CurrencyPair strategyCryptoCoinn = strategy.getCoinOfIntrest();

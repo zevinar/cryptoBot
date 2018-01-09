@@ -40,3 +40,4 @@ commons/repo/
 cryptobot.iml
 repo/
 trade/trade.iml
+*.db

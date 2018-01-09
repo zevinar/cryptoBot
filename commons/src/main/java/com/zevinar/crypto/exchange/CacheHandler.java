@@ -1,5 +1,14 @@
 package com.zevinar.crypto.exchange;
 
+import static com.zevinar.crypto.utils.FunctionalCodeUtils.methodRunner;
+import static org.apache.commons.io.FileUtils.readFileToString;
+import static org.apache.commons.io.FileUtils.writeStringToFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -7,28 +16,43 @@ import java.util.function.Supplier;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Trade;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.zevinar.crypto.utils.DateUtils;
+import com.zevinar.crypto.utils.FunctionalCodeUtils.RunnableThrows;
 import com.zevinar.crypto.utils.enums.ExchangeEnum;
 
 public enum CacheHandler {
 	INSTANCE;
-	public void addTransactionToCache(Trade data) {
-		// TODO crypto implement
-	}
-
+	Gson gson = new GsonBuilder().create();
 	public Optional<List<Trade>> getRecords(String cacheKey) {
-		// TODO crypto implement
-		return Optional.empty();
+		 Optional<List<Trade>> ret;
+		File cachedFile = new File(cacheKey);
+		if( cachedFile.exists() ){
+			String tradeListString = methodRunner(() -> readFileToString(cachedFile, StandardCharsets.UTF_8.name()));
+			Type listType = new TypeToken<ArrayList<Trade>>(){}.getType();
+			List<Trade> tradeListObject = gson.fromJson(tradeListString, listType);
+			ret = Optional.of(tradeListObject);
+		}
+		else{
+			ret = Optional.empty();
+		}
+		return ret;
 	}
 
 	public Supplier<List<Trade>> fillCache(String cacheKey, List<Trade> recordsFromExchange) {
-		// TODO crypto implement
+		String tradesData = gson.toJson(recordsFromExchange);
+		
+		methodRunner((RunnableThrows<IOException>) () ->
+		writeStringToFile(new File(cacheKey), tradesData, StandardCharsets.UTF_8.name(), false));
 		return () -> recordsFromExchange;
 	}
 
 	public String buildCacheKey(long fromTime, ExchangeEnum exchangeType, CurrencyPair currencyPair) {
-		String keyTemplate = "%s#%s#%s";
+		String keyTemplate = ".." + File.separator + "db"+File.separator+"src"+File.separator+"main"+File.separator+"resources"+File.separator+"%s#%s#%s.db";
 		String dateKey = DateUtils.buildDateHourlyKey(fromTime);
-		return String.format(keyTemplate, exchangeType.name(), currencyPair.toString(), dateKey);
+		String currencyTemplate = "%s%s";
+		return String.format(keyTemplate, exchangeType.name(), String.format(currencyTemplate, currencyPair.base.getSymbol(), currencyPair.counter.getSymbol()), dateKey);
 	}
 }

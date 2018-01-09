@@ -29,18 +29,21 @@ public class StrategySimulator {
 		SimExchangeHandler exchangeHandler = new SimExchangeHandler();
 		SimpleStrategy strategy = new SimpleStrategy();
 		simulator.setNumOfDays(2);
+		simulator.setSleepDuration(0);
 		strategy.init(exchangeHandler);
 		simulator.runSimulation(strategy, exchangeHandler);
 
 	}
 
 	public void runSimulation(IStrategy strategy, SimExchangeHandler simExchangeHandler) {
-		long currentTimeMillis = DateUtils.roundToClosetHour(System.currentTimeMillis());
+ 
+		final long startTimeMillis = System.currentTimeMillis();
+		long roundedCurrentTimeMillis = DateUtils.roundToClosetHour(startTimeMillis);
 		CurrencyPair strategyCryptoCoinn = strategy.getCoinOfIntrest();
 		long numOfHours = calculateNumOfHours();
 		for (int i = 0; i < numOfHours; i++) {
-			final long startTime = currentTimeMillis - (numOfHours - i) * DateUtils.HOUR_IN_MS;
-			final long endTime = currentTimeMillis - (numOfHours - i - 1) * DateUtils.HOUR_IN_MS;
+			final long startTime = roundedCurrentTimeMillis - (numOfHours - i) * DateUtils.HOUR_IN_MS;
+			final long endTime = roundedCurrentTimeMillis - (numOfHours - i - 1) * DateUtils.HOUR_IN_MS;
 			List<Trade> fullHourTransactionsList = null;
 			fullHourTransactionsList = simExchangeHandler.getTradesWithCache(strategyCryptoCoinn, null, startTime,
 					endTime, null);
@@ -59,8 +62,11 @@ public class StrategySimulator {
 
 		}
 		simExchangeHandler.printStatus();
+		LOG.info("Simulation Took {} Seconds", (System.currentTimeMillis() - startTimeMillis)/ 1000);
 
 	}
+
+	
 
 	long calculateNumOfHours() {
 		return numOfDays * 24L;

@@ -61,8 +61,15 @@ public  class AbstractMarketDataExchangeHandler implements IMarketDataExchangeHa
 			Long limit) {
 		final String cacheKey = CacheHandler.INSTANCE.buildCacheKey(fromTime, getExchangeType(), currencyPair);
 		Optional<List<Trade>> optionalRec = CacheHandler.INSTANCE.getRecords(cacheKey);
-		return optionalRec.orElseGet(
-				CacheHandler.INSTANCE.fillCache(cacheKey, getTrades(currencyPair, fromId, fromTime, toTime, limit)));
+		List<Trade> ret;
+		if( optionalRec.isPresent() ){
+			ret = optionalRec.get();
+		}
+		else{
+			ret = getTrades(currencyPair, fromId, fromTime, toTime, limit);
+			CacheHandler.INSTANCE.fillCache(cacheKey, ret);
+		}
+		return ret;
 	}
 
 	@Override

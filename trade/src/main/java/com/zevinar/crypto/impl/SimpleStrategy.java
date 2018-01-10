@@ -1,6 +1,5 @@
 package com.zevinar.crypto.impl;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.knowm.xchange.currency.CurrencyPair;
@@ -10,6 +9,9 @@ import com.zevinar.crypto.interfcaes.IStrategyFeature;
 import com.zevinar.crypto.strategy.impl.BasicTradeFeature;
 
 public class SimpleStrategy extends AbstractSimulationStrategy {
+	public SimpleStrategy() {
+		strategyFeatures.add(new BasicTradeFeature());
+	}
 
 	@Override
 	public CurrencyPair getCoinOfIntrest() {
@@ -18,9 +20,7 @@ public class SimpleStrategy extends AbstractSimulationStrategy {
 
 	@Override
 	public List<IStrategyFeature> getFeatures() {
-		return Arrays.asList(new BasicTradeFeature());
+		return strategyFeatures;
 	}
-
-	
 
 }

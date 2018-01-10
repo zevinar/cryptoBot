@@ -19,4 +19,15 @@ public abstract class AbstractSimulationStrategy extends AbstractStrategy {
 	public void setSimExchangeHandler(SimExchangeHandler handler){
 		this.handler = handler;
 	}
+	public void addStrategyFeature(IStrategyFeature feature){
+		strategyFeatures.add(feature);
+	}
+	
+	public void removeStrategyFeature(IStrategyFeature feature){
+		strategyFeatures.remove(feature);
+	}
+	
+	public void removeAllStrategyFeature(){
+		strategyFeatures.clear();
+	}
 }

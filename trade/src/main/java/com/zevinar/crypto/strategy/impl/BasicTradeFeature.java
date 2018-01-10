@@ -21,6 +21,9 @@ public class BasicTradeFeature extends  AbstractStrategyFeature{
 	private double bidDiscount = 0.16;
 	private double sellProfit = 0.2;
 	double wantedBuyPrice = 0, actualBuyPrice = 0, wantedSellPrice = 0, actualSellPrice = 0;
+	protected void reset(){
+		wantedBuyPrice = 0; actualBuyPrice = 0; wantedSellPrice = 0; actualSellPrice = 0;
+	}
 	@Override
 	public boolean performDecision(List<Trade> dataList) {
 		boolean continueAnalysis = true;
@@ -96,6 +99,10 @@ public class BasicTradeFeature extends  AbstractStrategyFeature{
 	}
 	public void setSellProfit(double sellProfit) {
 		this.sellProfit = sellProfit;
+	}
+	@Override
+	public String toString() {
+		return "BasicTradeFeature [bidDiscount=" + bidDiscount + ", sellProfit=" + sellProfit + "]";
 	}
 
 

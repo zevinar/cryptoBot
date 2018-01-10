@@ -21,20 +21,19 @@ import com.zevinar.crypto.utils.FunctionalCodeUtils.RunnableThrows;
 public class StrategySimulator {
 	private static final Logger LOG = LoggerFactory.getLogger(StrategySimulator.class);
 	// Sim Params
-	private int numOfDays = 1;
+	private int numOfDays = 30;
 	private int sleepDuration = 0;
 
 	public static void main(String[] args) {
 		StrategySimulator simulator = new StrategySimulator();
-		runBasicStrategy(simulator);
-		runBasicStrategy(simulator);
+		simulator.runBasicStrategy();
 
 	}
 
-	private static void runBasicStrategy(StrategySimulator simulator) {
+	private void runBasicStrategy() {
 		SimpleStrategy strategy = new SimpleStrategy();
 		strategy.init();
-		simulator.runSimulation(strategy);
+		runSimulation(strategy);
 	}
 
 	public void runSimulation(AbstractSimulationStrategy strategy) {

@@ -1,12 +1,13 @@
 package com.zevinar.crypto.exchange;
 
-import com.zevinar.crypto.exchange.interfcaes.IMarketDataExchangeHandler;
-import com.zevinar.crypto.exchange.realexchange.BinanceExchangeHandler;
-import com.zevinar.crypto.exchange.realexchange.BittrexExchangeHandler;
-import com.zevinar.crypto.exchange.realexchange.GateioExchangeHandler;
-import com.zevinar.crypto.exchange.realexchange.WexExchangeHandler;
-import com.zevinar.crypto.utils.DateUtils;
-import com.zevinar.crypto.utils.FunctionalCodeUtils;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.List;
+import java.util.Set;
+
 import org.junit.Test;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.OrderBook;
@@ -14,14 +15,9 @@ import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.dto.marketdata.Trade;
 import org.reflections.Reflections;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.List;
-import java.util.Set;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.knowm.xchange.currency.Currency.LTC;
+import com.zevinar.crypto.exchange.interfcaes.IMarketDataExchangeHandler;
+import com.zevinar.crypto.exchange.realexchange.GateioExchangeHandler;
+import com.zevinar.crypto.exchange.realexchange.WexExchangeHandler;
 
 public class AllExchangeHandlerTest {
 	@Test

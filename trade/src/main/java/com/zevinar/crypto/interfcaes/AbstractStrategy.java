@@ -1,5 +1,6 @@
 package com.zevinar.crypto.interfcaes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.knowm.xchange.dto.marketdata.Trade;
@@ -11,7 +12,7 @@ import com.zevinar.crypto.exchange.interfcaes.ITradeExchangeHandler;
 public abstract class AbstractStrategy implements IStrategy{
 	protected static final Logger LOG = LoggerFactory.getLogger(AbstractStrategy.class);
 	protected ITradeExchangeHandler exchangeHandler;
-	protected List<IStrategyFeature> strategyFeatures;
+	protected List<IStrategyFeature> strategyFeatures = new ArrayList<>();
 	
 	
 	@Override
@@ -26,4 +27,5 @@ public abstract class AbstractStrategy implements IStrategy{
 		strategyFeatures.stream().forEach(strategyFeature -> strategyFeature.performDecision(dataList));
 		return true;
 	}
+	
 }

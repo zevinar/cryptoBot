@@ -26,7 +26,9 @@ public class SimExchangeHandler extends AbstractTradeExchangeHandler {
 
 	List<IOpenTransaction> openTransactionsList = new ArrayList<>();
 	Map<Currency, Double> coinBalanceMap = new HashedMap<>();
-	private double currentCashUSD = 100;
+	private double initialCache = 100;
+	private double currentCashUSD = initialCache;
+	Trade lastTradeQuote;
 
 	@Override
 	public ExchangeEnum getExchangeType() {
@@ -83,10 +85,10 @@ public class SimExchangeHandler extends AbstractTradeExchangeHandler {
 
 	public void feedData(List<Trade> dataList) {
 		if (!isEmpty(dataList) && !isEmpty(openTransactionsList)) {
-			Trade Trade = dataList.get(NumberUtils.INTEGER_ZERO);
+			lastTradeQuote = dataList.get(NumberUtils.INTEGER_ZERO);
 			IOpenTransaction openTransaction = openTransactionsList.get(NumberUtils.INTEGER_ZERO);
 			if (openTransaction.getTransactionType() == TransactionTypeEnum.BUY
-					&& openTransaction.getCoinUsdPrice() >= Trade.getPrice().doubleValue()) {
+					&& openTransaction.getCoinUsdPrice() >= lastTradeQuote.getPrice().doubleValue()) {
 				openTransactionsList.remove(openTransaction);
 				LOG.info("Transaction Performed {}", openTransaction);
 				double coinAmountBought = (1 - getTradingFee()) * openTransaction.getTransactionAmount()
@@ -94,7 +96,7 @@ public class SimExchangeHandler extends AbstractTradeExchangeHandler {
 				coinBalanceMap.put(openTransaction.getCoinType(), coinAmountBought);
 
 			} else if (openTransaction.getTransactionType() == TransactionTypeEnum.SELL
-					&& openTransaction.getCoinUsdPrice() <= Trade.getPrice().doubleValue()) {
+					&& openTransaction.getCoinUsdPrice() <= lastTradeQuote.getPrice().doubleValue()) {
 				currentCashUSD += (1 - getTradingFee()) * openTransaction.getCoinUsdPrice()
 						* openTransaction.getTransactionAmount();
 				openTransactionsList.remove(openTransaction);
@@ -105,23 +107,26 @@ public class SimExchangeHandler extends AbstractTradeExchangeHandler {
 
 	@Override
 	public Double getTradingFee() {
-
 		return 0.02;
 	}
 
 	public void printStatus() {
-		String printLine = String.format("Strategy Status: current Cash: %s ", currentCashUSD);
+		double totalWorth = getBalanceSum();
+		LOG.info("Strategy Status: current Cash: {}, Total Worth is:{}", currentCashUSD, totalWorth);
+	}
+
+	public double getBalanceSum() {
+		double totalWorth = currentCashUSD;
 		if (!isEmpty(openTransactionsList)) {
 			IOpenTransaction iOpenTransaction = openTransactionsList.get(NumberUtils.INTEGER_ZERO);
 			final double amountInTransaction = iOpenTransaction.getTransactionAmount();
+
 			switch (iOpenTransaction.getTransactionType()) {
 			case BUY:
-				printLine += String.format("Cache In Transactions: %s, total Cache: %s", amountInTransaction,
-						amountInTransaction + currentCashUSD);
+				totalWorth += amountInTransaction;
 				break;
 			case SELL:
-				printLine += String.format("Coins In Transactions: %s %s", amountInTransaction,
-						iOpenTransaction.getCoinType().getDisplayName());
+				totalWorth += amountInTransaction * lastTradeQuote.getPrice().doubleValue();
 				break;
 			default:
 				throw new NotImplementedException(
@@ -129,6 +134,15 @@ public class SimExchangeHandler extends AbstractTradeExchangeHandler {
 			}
 
 		}
-		LOG.info(printLine);
+		return totalWorth;
 	}
+
+	public void reset() {
+		openTransactionsList.clear();
+		coinBalanceMap.clear();
+		currentCashUSD = initialCache;
+		lastTradeQuote = null;
+	}
+
+	
 }

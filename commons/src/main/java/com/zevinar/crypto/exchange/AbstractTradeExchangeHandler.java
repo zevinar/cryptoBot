@@ -91,9 +91,5 @@ public abstract class AbstractTradeExchangeHandler extends AbstractAccountExchan
 		return  tradeService.getOrder(orderIds);
 	}
 
-	//custom
-
-	public void postTransactionRequest(IOpenTransaction request) {
-
-	}
+	
 }

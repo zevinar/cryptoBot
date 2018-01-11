@@ -8,6 +8,7 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.OrderBook;
@@ -20,7 +21,7 @@ import com.zevinar.crypto.exchange.realexchange.GateioExchangeHandler;
 import com.zevinar.crypto.exchange.realexchange.WexExchangeHandler;
 
 public class AllExchangeHandlerTest {
-	@Test
+	@Test @Ignore
 	public void testAllMarketDataExchanges() {
 		Reflections reflections = new Reflections("com.zevinar.crypto.exchange.realexchange");
 		Boolean failed=false;

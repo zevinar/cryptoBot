@@ -7,7 +7,7 @@ import org.knowm.xchange.dto.meta.ExchangeMetaData;
 
 import java.util.List;
 
-public interface IExchangeHandler {
+public interface IExchangeInfo {
 
 	ExchangeEnum getExchangeType() ;
 

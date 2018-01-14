@@ -7,7 +7,7 @@ import org.knowm.xchange.dto.marketdata.OrderBook;
 import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.dto.marketdata.Trade;
 
-public interface IMarketDataExchangeHandler extends IExchangeHandler  {
+public interface IMarketDataExchangeHandler extends IExchangeInfo {
 
 	//market data api
 
